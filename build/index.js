@@ -7,20 +7,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // import {userModel} from './Models/User'
 // import {connectString} from './config/config'
 const express_1 = __importDefault(require("express"));
-const db_1 = __importDefault(require("./config/db"));
+const routes_1 = require("../src/apis/routes/routes");
+const index_1 = require("./database/index");
 // const connectDB = require('./config/db')
 //Import the mongoose module
 // const mongoose = require('mongoose');
-(0, db_1.default)();
+(0, index_1.connectDB)();
 const app = (0, express_1.default)();
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({
+    extended: true
+}));
+app.use(routes_1.router);
 const port = process.env.PORT;
-// let newUser = new userModel({ username: 1, password: '123456',firstName:'name',lastName:'lastName',address:'Address',isSeller:true,aadharNumber:12});
-// // Save the new model instance, passing a callback
-// newUser.save(function (err) {
-//   if (err) return console.log(chalk.bgRed.bold(err));
-//   console.log(chalk.bgGreen.bold("Saved"));
-//   // saved!
-// });
 app.listen(port, () => {
     console.log(`Started up at port ${port}`);
 });

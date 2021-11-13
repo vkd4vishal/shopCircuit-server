@@ -4,7 +4,7 @@ import  mongoose from "mongoose"
 let schema = mongoose.Schema;
 
 var userSchema = new schema({
-    username: {
+    userName: {
       type: String,
       minLength: 1,
       maxLength: 20,

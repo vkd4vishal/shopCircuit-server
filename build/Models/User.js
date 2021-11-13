@@ -8,7 +8,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 //Define a schema
 let schema = mongoose_1.default.Schema;
 var userSchema = new schema({
-    username: {
+    userName: {
         type: String,
         minLength: 1,
         maxLength: 20,
