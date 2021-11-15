@@ -47,7 +47,6 @@ var userSchema = new schema({
         max: 999999999999
     },
     photo: {
-        data: Buffer,
         contentType: String,
         required: [false, 'Please upload your image.']
     }

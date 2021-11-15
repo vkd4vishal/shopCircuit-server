@@ -16,6 +16,10 @@ exports.signUp = void 0;
 const index_1 = require("../../Models/index");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (req.hasOwnProperty('file_error')) {
+        res.status(200).send('Only jpeg and png format are allowed for the image.');
+        return;
+    }
     const { userName, password, firstName, lastName, address, isSeller, aadharNumber } = req.body;
     const hashedPassword = yield bcrypt_1.default.hash(password, 10);
     let newUser = new index_1.userModel(Object.assign(Object.assign({}, req.body), { password: hashedPassword }));

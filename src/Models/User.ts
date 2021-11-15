@@ -47,7 +47,6 @@ var userSchema = new schema({
     },
     photo:
     {
-        data: Buffer,
         contentType: String,
         required:[false,'Please upload your image.']
     }
