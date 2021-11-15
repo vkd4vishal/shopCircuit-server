@@ -1,6 +1,9 @@
 import express from 'express'
 import {signUp} from '../controllers'
 export const router  = express.Router();
+import multer from 'multer';
 
-router.post('/signup',signUp );
+const upload=multer({dest:'uploads/'})
+
+router.post('/signup',upload.single('profileImage'),signUp );
 

@@ -1,0 +1,15 @@
+@host = localhost:1234
+
+POST  /signup HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+
+{
+    "userName": 1,
+    "password": "sangharsh",
+    "firstName": "shankar",
+    "lastName": "atithee",
+    "address": "bishnu",
+    "isSeller": true,
+    "aadharNumber": 123456789111
+}
