@@ -4,7 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.upload = void 0;
-const GridFsStorage = require('multer-gridfs-storage');
+const multer_gridfs_storage_1 = require("multer-gridfs-storage");
+// import Grid from 'gridfs-stream';
 const index_1 = require("../../config/index");
 const multer_1 = __importDefault(require("multer"));
 // const storage = multer.diskStorage({
@@ -30,7 +31,7 @@ const fileFilter = (req, file, cb) => {
 //     }, fileFilter
 // })
 // Create storage engine
-const storage = new GridFsStorage({
+const storage = new multer_gridfs_storage_1.GridFsStorage({
     url: index_1.connectString,
     file: (req, file) => {
         return new Promise((resolve, reject) => {

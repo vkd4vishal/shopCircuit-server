@@ -8,5 +8,5 @@ const db = env.NODE_ENV === 'test' ? env.TEST_ENV : env.ENV
 //     connectString:
 //         `mongodb+srv://${user}:${key}@cluster0.mwy82.mongodb.net/${db}?retryWrites=true&w=majority`,
 // }
-export const connectString=`mongodb+srv://${user}:${key}@cluster0.mwy82.mongodb.net/${db}?retryWrites=true&w=majority`
+export const connectString=`mongodb+srv://${user}:${key}@cluster0.mwy82.mongodb.net/${db}?retryWrites=true&w=majority&tls=true`
  

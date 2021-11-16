@@ -1,7 +1,10 @@
 import joi from '@hapi/joi'
+const pattern = "/(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[$@$!#.])[A-Za-zd$@$!%*?&.]{8,20}/";
 const userSchema = joi.object({
     userName: joi.string().min(1).max(20).required(),
-    password: joi.string().min(1).max(30).required(),
+    email:joi.string().email({ tlds: { allow: false } }).required(),
+    password: joi.string().min(1).max(30).regex(RegExp(pattern)).required(),
+    confirmPassword: joi.ref('password'),
     firstName: joi.string().min(1).max(20).required(),
     lastName: joi.string().min(1).max(20).required(),
     address: joi.string().min(1).max(100).required(),
@@ -16,6 +19,7 @@ const userSchema = joi.object({
 
     }),
     photo:
-        joi.string().required()
+        joi.string().required(),
+
 
 });

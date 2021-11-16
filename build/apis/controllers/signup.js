@@ -17,7 +17,7 @@ const index_1 = require("../../Models/index");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (req.hasOwnProperty('file_error')) {
-        res.status(200).send('Only jpeg and png format are allowed for the image.');
+        res.status(442).send('Only jpeg and png format are allowed for the image.');
         return;
     }
     const { userName, password, firstName, lastName, address, isSeller, aadharNumber } = req.body;

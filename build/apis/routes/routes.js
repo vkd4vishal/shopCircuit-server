@@ -5,17 +5,36 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 const express_1 = __importDefault(require("express"));
-const mongoose_1 = __importDefault(require("mongoose"));
 const controllers_1 = require("../controllers");
-const GridFsStorage = require('multer-gridfs-storage');
-const Grid = require('gridfs-stream');
-const index_1 = require("../../index");
 exports.router = express_1.default.Router();
 const validators_1 = require("../validators");
-let gfs;
-index_1.db.once('open', () => {
-    // Init stream
-    gfs = Grid(index_1.db.db, mongoose_1.default.mongo);
-    gfs.collection('images');
-});
+const index_1 = require("../../index");
 exports.router.post('/signup', validators_1.upload.single('userImage'), controllers_1.signUp);
+exports.router.get('/images', (req, res) => {
+    index_1.gfs.find().toArray((err, files) => {
+        // Check if files
+        if (!files || files.length === 0) {
+            // res.render('index', { files: false });
+            res.send('No Images found');
+            console.log(err);
+        }
+        else {
+            const file = files[1];
+            index_1.gfs.openDownloadStreamByName(file.filename).pipe(res);
+            //         files.map((file: any) => {
+            //             if (
+            //                 file.contentType === 'image/jpeg' ||
+            //                 file.contentType === 'image/png'
+            //             ) {
+            //                 file.isImage = true;
+            //                 const readstream = gfs.createReadStream(file.filename);
+            //   readstream.pipe(res);
+            //             } else {
+            //                 file.isImage = false;
+            //             }
+            //         });
+            //         // res.render('index', { files: files });
+            //         res.send(files)
+        }
+    });
+});
