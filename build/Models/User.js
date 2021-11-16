@@ -15,6 +15,13 @@ var userSchema = new schema({
         required: [true, 'You must enter username'],
         index: { unique: true }
     },
+    email: {
+        type: String,
+        minLength: 1,
+        maxLength: 20,
+        required: [true, 'You must enter email.'],
+        index: { unique: true }
+    },
     password: {
         type: String,
         minLength: 1,

@@ -15,16 +15,37 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.signUp = void 0;
 const index_1 = require("../../Models/index");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (req.hasOwnProperty('file_error')) {
-        res.status(442).send('Only jpeg and png format are allowed for the image.');
-        return;
+const validators_1 = require("../validators");
+const utils_1 = require("../../utils");
+class AppError {
+    constructor(message) {
+        this.message = message;
     }
-    const { userName, password, firstName, lastName, address, isSeller, aadharNumber } = req.body;
+}
+const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const options = {
+        abortEarly: false,
+        allowUnknown: true,
+        stripUnknown: true, // remove unknown props
+    };
+    const { error, value } = validators_1.userSchema.validate(req.body, options);
+    if (error) {
+        console.log(error.details);
+        return res
+            .status(500)
+            .send(`Validation error: ${error.details[0].message}`);
+    }
+    if (req.hasOwnProperty("file_error")) {
+        return (0, utils_1.sendError)(res, 442, "Only jpeg and png format are allowed for the image.");
+    }
+    const { userName, password } = req.body;
     const hashedPassword = yield bcrypt_1.default.hash(password, 10);
+    const record = yield index_1.userModel.findOne({ userName });
+    if (record) {
+        return (0, utils_1.sendError)(res, 500, "Username already exists.");
+    }
     let newUser = new index_1.userModel(Object.assign(Object.assign({}, req.body), { password: hashedPassword }));
-    // // Save the new model instance, passing a callback
     const result = yield newUser.save();
-    res.status(200).send(result);
+    return (0, utils_1.CREATE)(res, result, "User Profile");
 });
 exports.signUp = signUp;
