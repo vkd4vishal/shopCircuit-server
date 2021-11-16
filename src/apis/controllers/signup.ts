@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt'
 export const signUp: RequestHandler = async (req: Request, res: Response) => {
     if(req.hasOwnProperty('file_error')){
         
-    res.status(200).send('Only jpeg and png format are allowed for the image.') 
+    res.status(442).send('Only jpeg and png format are allowed for the image.') 
     return
     }
     const { userName, password, firstName, lastName, address, isSeller, aadharNumber } = req.body

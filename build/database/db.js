@@ -15,5 +15,6 @@ const connectDB = () => {
     mongoose_1.default.connect(index_1.connectString).then(() => console.log("Connected to the Database...")).catch(err => console.log(err));
     const db = mongoose_1.default.connection;
     db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+    return db;
 };
 exports.connectDB = connectDB;
