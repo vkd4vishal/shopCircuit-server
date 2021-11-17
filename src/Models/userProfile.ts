@@ -1,6 +1,5 @@
 
 import  mongoose from "mongoose"
-//Define a schema
 let schema = mongoose.Schema;
 
 var userSchema = new schema({
@@ -61,9 +60,3 @@ var userSchema = new schema({
 
 // Compile model from schema
 export const userModel = mongoose.model('User', userSchema );
-
-
-
-
-// Create an instance of model SomeModel
-// var awesome_instance = new userModel({ name: 'vkd',password:'vishal' });

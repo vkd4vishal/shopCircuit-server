@@ -1,6 +1,6 @@
 import Joi from 'joi'
 const pattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
-export const userSchema = Joi.object({
+export const userProfileSchema = Joi.object({
     userName: Joi.string().min(1).max(20).required(),
     email:Joi.string().email({ tlds: { allow: false } }).required(),
     password: Joi.string().min(1).max(30).regex(pattern).required(),

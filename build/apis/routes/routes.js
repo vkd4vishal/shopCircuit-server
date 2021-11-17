@@ -6,35 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 const express_1 = __importDefault(require("express"));
 const controllers_1 = require("../controllers");
-exports.router = express_1.default.Router();
 const validators_1 = require("../validators");
 const reqValidator_1 = require("../../utils/reqValidator");
-exports.router.post('/signup', (0, reqValidator_1.validateBody)(validators_1.userSchema), controllers_1.signUp);
-exports.router.post('/uploadImage', validators_1.upload.single('userImage'));
-// router.get('/images', (req, res) => {
-//     gfs.find().toArray((err: any, files: any) => {
-//         // Check if files
-//         if (!files || files.length === 0) {
-//             // res.render('index', { files: false });
-//             res.send('No Images found')
-//             console.log(err)
-//         } else {
-//             const file = files[1]
-//             gfs.openDownloadStreamByName(file.filename).pipe(res)
-//             //         files.map((file: any) => {
-//             //             if (
-//             //                 file.contentType === 'image/jpeg' ||
-//             //                 file.contentType === 'image/png'
-//             //             ) {
-//             //                 file.isImage = true;
-//             //                 const readstream = gfs.createReadStream(file.filename);
-//             //   readstream.pipe(res);
-//             //             } else {
-//             //                 file.isImage = false;
-//             //             }
-//             //         });
-//             //         // res.render('index', { files: files });
-//             //         res.send(files)
-//         }
-//     });
-// });
+exports.router = express_1.default.Router();
+exports.router.post('/signup', (0, reqValidator_1.validateBody)(validators_1.userProfileSchema), controllers_1.signUp);
+exports.router.post('/uploadUserImage', (0, reqValidator_1.validateFile)(validators_1.userImageFileSchema), (0, reqValidator_1.validateQuery)(validators_1.userImageReqSchema), validators_1.upload.single('userImage'), controllers_1.uploadUserImage);

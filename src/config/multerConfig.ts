@@ -17,10 +17,10 @@ const storage = new GridFsStorage({
     url: connectString,
     file: (req: any, file: any) => {
         return new Promise((resolve, reject) => {
-            const filename = req.body.userName + `${file.mimetype === 'image/jpeg' ? '.jpeg' : '.png'}`;
+            const filename = req.query.id + `${file.mimetype === 'image/jpeg' ? '.jpeg' : '.png'}`;
             const fileInfo = {
                 filename: filename,
-                bucketName: 'images'
+                bucketName: 'userProfileImages'
             };
             resolve(fileInfo);
         });
