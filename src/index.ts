@@ -6,13 +6,13 @@ import { connectDB } from "./database/index"
 
 import mongoose from 'mongoose'
 
-const Grid = require('gridfs-stream');
+// const Grid = require('gridfs-stream');
 export const db = connectDB()
 
-export let gfs: any;
+export let gfs:any;
 db.once('open', () => {
-  gfs = new mongoose.mongo.GridFSBucket(db.db, {
-    bucketName: 'images'
+  gfs = new mongoose.mongo.GridFSBucket(db.db,{
+    bucketName:'userProfileImages'
   })
 });
 const app = express()
@@ -24,6 +24,8 @@ app.use(router)
 
 
 const port = process.env.PORT;
+
+
 
 
 app.listen(port, () => {
