@@ -3,7 +3,9 @@ import { signUp } from '../controllers'
 export const router = express.Router();
 import { upload, userSchema } from '../validators'
 import { gfs } from '../../index'
-router.post('/signup', upload.single('userImage'), signUp);
+import { validateBody } from '../../utils/reqValidator';
+router.post('/signup', validateBody(userSchema), signUp);
+router.post('/uploadImage', upload.single('userImage'));
 // router.get('/images', (req, res) => {
 //     gfs.find().toArray((err: any, files: any) => {
 //         // Check if files

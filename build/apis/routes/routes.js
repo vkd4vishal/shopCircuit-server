@@ -8,7 +8,9 @@ const express_1 = __importDefault(require("express"));
 const controllers_1 = require("../controllers");
 exports.router = express_1.default.Router();
 const validators_1 = require("../validators");
-exports.router.post('/signup', validators_1.upload.single('userImage'), controllers_1.signUp);
+const reqValidator_1 = require("../../utils/reqValidator");
+exports.router.post('/signup', (0, reqValidator_1.validateBody)(validators_1.userSchema), controllers_1.signUp);
+exports.router.post('/uploadImage', validators_1.upload.single('userImage'));
 // router.get('/images', (req, res) => {
 //     gfs.find().toArray((err: any, files: any) => {
 //         // Check if files

@@ -1,2 +1,2 @@
-export * from './signUp'
-export * from './userImage'
+export * from './userProfile'
+export * from '../../config/multerConfig'

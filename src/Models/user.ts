@@ -52,11 +52,11 @@ var userSchema = new schema({
         min: 100000000000,
         max: 999999999999
     },
-    photo:
-    {
-        contentType: String,
-        required:[false,'Please upload your image.']
-    }
+    // photo:
+    // {
+    //     contentType: String,
+    //     required:[false,'Please upload your image.']
+    // }
   });
 
 // Compile model from schema
