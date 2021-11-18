@@ -1,73 +1,66 @@
-import { Request, Response, RequestHandler } from "express";
+import { Request, Response, RequestHandler, NextFunction } from "express";
 import { userModel, userProfileImagesModel } from "../../Models/index";
 import mongoose from 'mongoose'
-import { sendError, UPDATE } from "../../utils";
+import { CREATE, sendError, UPDATE } from "../../utils";
 import { gfs } from '../../index'
+import { upload } from "../validators";
 
 
-const validateFile = (req: Request, res: Response) => {
+export const validateFile = (req: Request, res: Response) => {
+  console.log("VALIDATE FILE");
+
   if (!req.file) {
-    return sendError(res, 442, 'Please select a photo.')
+    return sendError(res,442,'Please select an image.')
   }
-
+  const reqCopy: any = { ...req }
   if (req.hasOwnProperty("file_error")) {
     return sendError(
       res,
       442,
-      "Only jpeg and png format are allowed for the image."
+      reqCopy.file_error
     );
   }
+  return CREATE(res, {}, 'User image')
 }
 
-export const uploadUserImage: RequestHandler = async (req: Request, res: Response) => {
-  console.log('entered')
-  const { id } = req.query;
-  validateFile(req, res)
-  const record = await userModel.findOne({
-    _id: new mongoose.Types.ObjectId(id?.toString())
-  })
+export const uploadUserImage: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+  console.log("UPLOAD USER IMAGE ");
+  // validateFile(req, res)
+  const userId = req.headers.userid
+  const userExist = await userModel.findOne({ _id: new mongoose.Types.ObjectId(userId?.toString()) })
 
-  // const image = await userProfileImagesModel.find({
-  //   // filename: id?.toString()
-  // })
-  //   gfs.find().toArray((err: any, files: any) => {
-  //     // Check if files
-  //     if (!files || files.length === 0) {
-  //         // res.render('index', { files: false });
-  //         return res.send('No Images found')
-  //         console.log(err)
-  //     } else {
-  //         const file = files[1]
-  //         console.log('file',file)
-  //     }
-  // });
-  gfs.find({ filename: id?.toString()+'.jpeg' }).toArray((err: any, files: any) => {
-    // Check if files
-    if (!files || files.length === 0) {
-      // res.render('index', { files: false });
-      return sendError(res, 500, `Image not found.`)
-    } else {
-      files.forEach((image:any) => {
-
-        console.log('img', image)
-      });
-    }
-  })
-  const uploadImage: any = req.file
-  const uploadedImageId = uploadImage.id.toString() 
-  console.log('uploadedImageId',uploadedImageId)
-  console.log('gfs',gfs)
-  if (!record) {
-    // await userProfileImagesModel.deleteOne({ filename: id?.toString() })
-    // gfs.remove({_id:uploadedImageId})
-    gfs.delete({ id:new mongoose.Types.ObjectId(uploadedImageId) }, (err:any) => {
-      if (err) console.log('err',err)
-      console.log('ssuecs')
-  })
-    return sendError(res, 500, `User not found.`)
+  if (!userExist) {
+    return sendError(res, 302, "This user does not exist")
   }
- 
+
+  next()
 
   // await userProfileImagesModel.findOneAndUpdate({ filename: id?.toString() }, { filename: id?.toString() })
-  return UPDATE(res, {}, "User Image");
+  // return UPDATE(res, 200, "User Image is created successfully!");
+};
+
+export const updateUserImage: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+  console.log("UPDATE USER IMAGE");
+  let isImage = true;
+  // validateFile(req, res)
+  const userId = req.headers.userid
+  const userExist = await userModel.findOne({ _id: new mongoose.Types.ObjectId(userId?.toString()) })
+  if (!userExist) {
+    return sendError(res, 302, "This user does not exist")
+  }
+
+
+  gfs.find({ filename: userId?.toString() + '.png' }).toArray((err: any, files: any) => {
+    // Check if files
+    if (!files || files.length === 0) {
+      isImage = false
+    } else {
+      gfs.delete(files[0]._id)
+    }
+  })
+  if (!isImage) { return sendError(res, 500, `Image not found.`) }
+  console.log("ek line pehle");
+  
+  next()
+
 };

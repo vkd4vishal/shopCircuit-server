@@ -1,13 +1,13 @@
 import express from 'express'
-import { signUp, uploadUserImage } from '../controllers'
+import { signUp, updateUserImage, uploadUserImage, validateFile } from '../controllers'
 import { upload, userProfileSchema, userImageReqSchema } from '../validators'
-import { validateBody, validateQuery } from '../../utils/reqValidator';
+import { validateBody, validateHeaders } from '../../utils/reqValidator';
 
 export const router = express.Router();
 router.post('/signup', validateBody(userProfileSchema), signUp);
-router.post('/uploadUserImage',
-    // validateFile(userImageFileSchema),
-    validateQuery(userImageReqSchema), upload.single('photo'), uploadUserImage);
+router.post('/uploadUserImage', validateHeaders(userImageReqSchema), uploadUserImage, upload.single('photo'), validateFile);
+
+router.post('/updateUserImage', validateHeaders(userImageReqSchema), updateUserImage, upload.single('photo'), validateFile);
 
 
 

@@ -25,13 +25,13 @@ export const validateBody = (schema:any) =>  (
     }
    next();
 }
-export const validateQuery = (schema:any) =>  (
+export const validateHeaders = (schema:any) =>  (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
     
-    const { error, value } = schema.validate(req.query, options);
+    const { error, value } = schema.validate(req.headers.userId, options);
     
     if (error) {
       return sendError(
