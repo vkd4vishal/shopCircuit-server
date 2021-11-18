@@ -30,8 +30,7 @@ export const validateHeaders = (schema:any) =>  (
   res: Response,
   next: NextFunction,
 ) => {
-    
-    const { error, value } = schema.validate(req.headers.userId, options);
+    const { error, value } = schema.validate(req.headers, options);
     
     if (error) {
       return sendError(
@@ -42,20 +41,3 @@ export const validateHeaders = (schema:any) =>  (
     }
    next();
 }
-// export const validateFile = (schema:any) =>  (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction,
-// ) => {
-//     console.log('12',req.file)
-//     const { error, value } = schema.validate(req.file, options);
-    
-//     if (error) {
-//       return sendError(
-//         res,
-//         442,
-//         `Validation error: ${error.details[0].message}.`
-//       )
-//     }
-//    next();
-// }
