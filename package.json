@@ -11,6 +11,7 @@
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.13",
+    "@types/jsonwebtoken": "^8.5.6",
     "@types/mongoose": "^5.11.97",
     "@types/multer": "^1.4.7",
     "@types/node": "^16.11.7",
@@ -19,6 +20,7 @@
     "express": "^4.17.1",
     "gridfs-stream": "^1.1.1",
     "joi": "^17.4.2",
+    "jsonwebtoken": "^8.5.1",
     "method-override": "^3.0.0",
     "mongoose": "^6.0.12",
     "multer": "^1.4.3",

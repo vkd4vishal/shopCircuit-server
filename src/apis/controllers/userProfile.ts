@@ -1,10 +1,10 @@
 import { Request, Response, RequestHandler } from "express";
 import { userModel } from "../../Models/index";
 import bcrypt from "bcrypt";
-import { CREATE, sendError, GET, DELETE,UPDATE } from "../../utils";
+import { CREATE, sendError, GET, DELETE, UPDATE } from "../../utils";
 import mongoose from 'mongoose'
 import { gfs } from '../../index'
-
+import jwt from 'jsonwebtoken'
 
 
 
@@ -79,4 +79,42 @@ export const deleteUser: RequestHandler = async (req: Request, res: Response) =>
     })
   })
   return DELETE(res, {}, "User Profile");
+};
+
+export const login: RequestHandler = async (req: Request, res: Response) => {
+  const { userName, password, email } = req.body;
+  let user: any = undefined
+  if (userName) {
+
+    user = await userModel.findOne({ userName });
+    if (!user) {
+      return sendError(res, 500, "Username does not exist.");
+    }
+
+  } else {
+    user = await userModel.findOne({ email });
+    if (!user) {
+      return sendError(res, 500, "Email does not exist.");
+    }
+  }
+  const isValidPassword = await bcrypt.compare(password, user.password);
+  if (!isValidPassword) {
+    return sendError(res, 500, "Invalid Password.");
+
+  }
+
+  const payload = {
+    user: {
+      id: user._id.toString()
+    }
+  };
+  const token = jwt.sign(
+    payload,
+    process.env.JWT_SECRET ?? "",
+    {
+      expiresIn: 86400
+    })
+  return UPDATE(res, {
+    token
+  }, "Logged in");
 };

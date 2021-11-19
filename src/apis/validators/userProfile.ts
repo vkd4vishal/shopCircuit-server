@@ -27,3 +27,13 @@ export const updateUserProfileSchema = Joi.object({
     lastName: Joi.string().min(1).max(20),
     address: Joi.string().min(1).max(100)
 });
+
+
+
+
+export const userLoginSchema = Joi.object({
+    userName: Joi.string().min(1).max(20),
+    email: Joi.string().email({ tlds: { allow: false } }),
+    password: Joi.string().min(1).max(30).regex(pattern).required(),
+
+}).xor('userName', 'email'); 

@@ -1,6 +1,6 @@
 import express from 'express'
-import { signUp, updateUserImage, validateUser, validateFile, getProfile, deleteUser,updateUserProfile } from '../controllers'
-import { upload, userProfileSchema, userImageReqSchema ,updateUserProfileSchema} from '../validators'
+import { signUp, updateUserImage, validateUser, validateFile, getProfile, deleteUser,updateUserProfile,login } from '../controllers'
+import { upload, userProfileSchema, userImageReqSchema ,updateUserProfileSchema,userLoginSchema} from '../validators'
 import { validateBody, validateHeaders } from '../../utils/reqValidator';
 
 export const router = express.Router();
@@ -13,6 +13,7 @@ router.get('/getProfile', validateHeaders(userImageReqSchema), validateUser, get
 router.delete('/deleteUser', validateHeaders(userImageReqSchema), validateUser, deleteUser)
 
 router.put('/updateUserProfile',validateHeaders(userImageReqSchema), validateBody(updateUserProfileSchema),validateUser, updateUserProfile);
+router.put('/login',validateBody(userLoginSchema), login);
 
 
 

@@ -7,7 +7,7 @@ export const CREATE=(res: Response,data:any,id:string) => {
     res.status(201).send({data,message:`${ id} created successfully.`})
 }
 export const UPDATE=(res: Response,data:any,id:string) => {
-    res.status(200).send({data,message:`${id} updated successfully.`})
+    res.status(200).send({data,message:`${id} successfully.`})
 }
 export const DELETE=(res: Response,data:any,id:string) => {
     res.status(200).send({data,message:`${id} deleted successfully.`})
