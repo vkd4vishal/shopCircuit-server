@@ -1,7 +1,7 @@
 import { Request, Response, RequestHandler } from "express";
 import { userModel } from "../../Models/index";
 import bcrypt from "bcrypt";
-import { CREATE, sendError, GET, DELETE } from "../../utils";
+import { CREATE, sendError, GET, DELETE,UPDATE } from "../../utils";
 import mongoose from 'mongoose'
 import { gfs } from '../../index'
 
@@ -20,27 +20,53 @@ export const signUp: RequestHandler = async (req: Request, res: Response) => {
   return CREATE(res, result, "User Profile");
 };
 
-export const getProfile: RequestHandler = async (req: Request, res: Response) => {
-  const userId = req.headers.userid
-  const userProfile = await userModel.findOne({ _id: new mongoose.Types.ObjectId(userId?.toString()) })
+export const getProfile: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const userId = req.headers.userid;
+  const userProfile = await userModel.findOne({
+    _id: new mongoose.Types.ObjectId(userId?.toString()),
+  });
   if (!userProfile) {
-    return sendError(res, 302, "This user does not exist")
+    return sendError(res, 302, "This user does not exist");
   }
 
   function getImages() {
     return new Promise(function (resolve, reject) {
-      gfs.find({ filename: userId?.toString() + '.png' })
+      gfs
+        .find({ filename: userId?.toString() + ".png" })
         .toArray(function (err: any, files: any) {
           if (err) {
-            return reject(err)
+            return reject(err);
           }
-          return resolve(files)
-        })
-    })
+          return resolve(files);
+        });
+    });
   }
-  const userImage: any = await getImages()
+  const userImage: any = await getImages();
   // console.log('image',  gfs.openDownloadStreamByName(userImage.filename)) //don't remove this code. will be needed during UI development
   return GET(res, { userProfile, userImage }, "User Profile");
+};
+
+export const updateUserProfile: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const { userName } = req.body;
+  const userId = req.headers.userid;
+  const record = await userModel.findOne({
+    userName,
+    _id: { $ne: new mongoose.Types.ObjectId(userId?.toString()) },
+  });
+  if (record) {
+    return sendError(res, 500, "Username already exists.");
+  }
+  const result = await userModel.findOneAndUpdate(
+    { _id: new mongoose.Types.ObjectId(userId?.toString()) },
+    { ...req.body }
+  );
+  return UPDATE(res, result, "User Profile");
 };
 
 export const deleteUser: RequestHandler = async (req: Request, res: Response) => {
