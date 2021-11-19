@@ -1,7 +1,7 @@
 import { Request, Response, RequestHandler } from "express";
 import { userModel } from "../../Models/index";
 import bcrypt from "bcrypt";
-import { CREATE, sendError, GET } from "../../utils";
+import { CREATE, sendError, GET, DELETE } from "../../utils";
 import mongoose from 'mongoose'
 import { gfs } from '../../index'
 
@@ -38,7 +38,19 @@ export const getProfile: RequestHandler = async (req: Request, res: Response) =>
         })
     })
   }
-  const userImage:any =await getImages()
+  const userImage: any = await getImages()
   // console.log('image',  gfs.openDownloadStreamByName(userImage.filename)) //don't remove this code. will be needed during UI development
-  return GET(res, { userProfile,userImage }, "User Profile");
+  return GET(res, { userProfile, userImage }, "User Profile");
+};
+
+export const deleteUser: RequestHandler = async (req: Request, res: Response) => {
+  const userId = req.headers.userid
+  await userModel.deleteOne({ _id: new mongoose.Types.ObjectId(userId?.toString()) })
+
+  gfs.find({ filename: userId?.toString() + '.png' }).toArray((err: any, files: any) => {
+    files.forEach((file: any) => {
+      gfs.delete(file._id)
+    })
+  })
+  return DELETE(res, {}, "User Profile");
 };

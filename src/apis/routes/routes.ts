@@ -1,5 +1,5 @@
 import express from 'express'
-import { signUp, updateUserImage, validateUser, validateFile, getProfile } from '../controllers'
+import { signUp, updateUserImage, validateUser, validateFile, getProfile, deleteUser } from '../controllers'
 import { upload, userProfileSchema, userImageReqSchema } from '../validators'
 import { validateBody, validateHeaders } from '../../utils/reqValidator';
 
@@ -10,6 +10,8 @@ router.post('/signup', validateBody(userProfileSchema), signUp);
 router.post('/updateUserImage',
     validateHeaders(userImageReqSchema), validateUser, upload.single('photo'), validateFile, updateUserImage);
 router.get('/getProfile', validateHeaders(userImageReqSchema), validateUser, getProfile)
+router.delete('/deleteUser', validateHeaders(userImageReqSchema), validateUser, deleteUser)
+
 
 
 
