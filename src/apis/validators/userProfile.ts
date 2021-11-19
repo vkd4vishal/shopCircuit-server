@@ -20,3 +20,10 @@ export const userProfileSchema = Joi.object({
     })
 
 });
+export const updateUserProfileSchema = Joi.object({
+    userName: Joi.string().min(1).max(20),
+    email:Joi.string().email(),
+    firstName: Joi.string().min(1).max(20),
+    lastName: Joi.string().min(1).max(20),
+    address: Joi.string().min(1).max(100)
+});
