@@ -5,7 +5,7 @@ Host:{{host}}
 Content-Type: application/json
 
 {
-    "userName": 1,
+    "userName": "joinotworking",
     "password": "sangharsh",
     "firstName": "shankar",
     "lastName": "atithee",

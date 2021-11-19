@@ -1,1 +1,2 @@
-export * from './signup'
+export * from './userProfile'
+export * from './userImage'
