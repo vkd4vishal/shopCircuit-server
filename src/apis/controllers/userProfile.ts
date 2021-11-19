@@ -26,13 +26,19 @@ export const getProfile: RequestHandler = async (req: Request, res: Response) =>
   if (!userProfile) {
     return sendError(res, 302, "This user does not exist")
   }
-  // let image :any={details:'No Image'}
 
-  gfs.find({ filename: userId?.toString() + '.png' })
-    .toArray(function (err: any, files: any) {
-      if (files && files.length) {
-      }
+  function getImages() {
+    return new Promise(function (resolve, reject) {
+      gfs.find({ filename: userId?.toString() + '.png' })
+        .toArray(function (err: any, files: any) {
+          if (err) {
+            return reject(err)
+          }
+          return resolve(files)
+        })
     })
-  // console.log('details',details)
-  return GET(res, { userProfile }, "User Profile");
+  }
+  const userImage:any =await getImages()
+  // console.log('image',  gfs.openDownloadStreamByName(userImage.filename)) //don't remove this code. will be needed during UI development
+  return GET(res, { userProfile,userImage }, "User Profile");
 };
