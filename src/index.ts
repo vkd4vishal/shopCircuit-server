@@ -3,7 +3,7 @@
 import express from "express"
 import { router } from '../src/apis/routes/routes'
 import { connectDB } from "./database/index"
-
+import {  auth } from './utils';
 import mongoose from 'mongoose'
 
 // const Grid = require('gridfs-stream');
@@ -20,8 +20,8 @@ app.use(express.json());
 app.use(express.urlencoded({
   extended: true
 }));
+app.use(auth)
 app.use(router)
-
 
 const port = process.env.PORT;
 

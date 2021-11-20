@@ -9,14 +9,18 @@ import jwt from 'jsonwebtoken'
 
 
 export const signUp: RequestHandler = async (req: Request, res: Response) => {
-  const { userName, password } = req.body;
+  const { userName, password ,email} = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
   const record = await userModel.findOne({ userName });
   if (record) {
     return sendError(res, 500, "Username already exists.");
   }
+  const emailRecord = await userModel.findOne({ email });
+  if (emailRecord) {
+    return sendError(res, 500, "Email already used.");
+  }
   let newUser = new userModel({ ...req.body, password: hashedPassword });
-  const result = await newUser.save();
+  const result = await newUser.save()
   return CREATE(res, result, "User Profile");
 };
 
@@ -53,7 +57,7 @@ export const updateUserProfile: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
-  const { userName } = req.body;
+  const { userName,email } = req.body;
   const userId = req.headers.userid;
   const record = await userModel.findOne({
     userName,
@@ -61,6 +65,10 @@ export const updateUserProfile: RequestHandler = async (
   });
   if (record) {
     return sendError(res, 500, "Username already exists.");
+  }
+  const emailRecord = await userModel.findOne({ email, _id: { $ne: new mongoose.Types.ObjectId(userId?.toString()) } });
+  if (emailRecord) {
+    return sendError(res, 500, "Email already used.");
   }
   const result = await userModel.findOneAndUpdate(
     { _id: new mongoose.Types.ObjectId(userId?.toString()) },
