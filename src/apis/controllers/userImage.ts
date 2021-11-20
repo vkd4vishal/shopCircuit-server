@@ -10,14 +10,14 @@ export const validateFile = (req: Request, res: Response, next: NextFunction) =>
   if (req.hasOwnProperty("file_error")) {
     return sendError(
       res,
-      442,
+      422,
       reqCopy.file_error
     );
   }
   if (!req.file) {
     return sendError(
       res,
-      442,
+      422,
       'Please select an image.'
     );
 
@@ -31,7 +31,7 @@ export const validateUser: RequestHandler = async (req: Request, res: Response, 
 
   const userExist = await userModel.findOne({ _id: new mongoose.Types.ObjectId(userId?.toString()) })
   if (!userExist) {
-    return sendError(res, 302, "This user does not exist")
+    return sendError(res, 404, "This user does not exist")
   }
   next()
 

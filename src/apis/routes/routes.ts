@@ -27,6 +27,8 @@ router.get('/getItems', getItems)
 router.post('/addCategory', validateBody(categoryValidator), addCategory)
 router.get('/getCategories', getCategories)
 
+//router.put('/logout', validateHeaders(userImageReqSchema), logout);
+
 
 
 

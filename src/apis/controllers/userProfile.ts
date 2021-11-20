@@ -9,15 +9,15 @@ import jwt from 'jsonwebtoken'
 
 
 export const signUp: RequestHandler = async (req: Request, res: Response) => {
-  const { userName, password ,email} = req.body;
+  const { userName, password, email } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
   const record = await userModel.findOne({ userName });
   if (record) {
-    return sendError(res, 500, "Username already exists.");
+    return sendError(res, 403, "Username already exists.");
   }
   const emailRecord = await userModel.findOne({ email });
   if (emailRecord) {
-    return sendError(res, 500, "Email already used.");
+    return sendError(res, 403, "Email already used.");
   }
   let newUser = new userModel({ ...req.body, password: hashedPassword });
   const result = await newUser.save()
@@ -33,7 +33,7 @@ export const getProfile: RequestHandler = async (
     _id: new mongoose.Types.ObjectId(userId?.toString()),
   });
   if (!userProfile) {
-    return sendError(res, 302, "This user does not exist");
+    return sendError(res, 404, "This user does not exist");
   }
   //removing password from the object so that it is not returned to the response
   // let userProfile:{password?:string}=record
@@ -60,18 +60,18 @@ export const updateUserProfile: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
-  const { userName,email } = req.body;
+  const { userName, email } = req.body;
   const userId = req.headers.userid;
   const record = await userModel.findOne({
     userName,
     _id: { $ne: new mongoose.Types.ObjectId(userId?.toString()) },
   });
   if (record) {
-    return sendError(res, 500, "Username already exists.");
+    return sendError(res, 403, "Username already exists.");
   }
   const emailRecord = await userModel.findOne({ email, _id: { $ne: new mongoose.Types.ObjectId(userId?.toString()) } });
   if (emailRecord) {
-    return sendError(res, 500, "Email already used.");
+    return sendError(res, 403, "Email already used.");
   }
   const result = await userModel.findOneAndUpdate(
     { _id: new mongoose.Types.ObjectId(userId?.toString()) },
@@ -101,18 +101,18 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
 
     user = await userModel.findOne({ userName });
     if (!user) {
-      return sendError(res, 500, "Username does not exist.");
+      return sendError(res, 404, "Username does not exist.");
     }
 
   } else {
     user = await userModel.findOne({ email });
     if (!user) {
-      return sendError(res, 500, "Email does not exist.");
+      return sendError(res, 404, "Email does not exist.");
     }
   }
   const isValidPassword = await bcrypt.compare(password, user.password);
   if (!isValidPassword) {
-    return sendError(res, 500, "Invalid Password.");
+    return sendError(res, 401, "Invalid Password.");
 
   }
 
@@ -125,9 +125,22 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
     payload,
     process.env.JWT_SECRET ?? "",
     {
-      expiresIn: 86400
+      expiresIn: '10h'
     })
   return UPDATE(res, {
     token
   }, "Logged in");
 };
+
+// export const logout: RequestHandler = async (req: Request, res: Response) => {
+
+//   jwt.sign(req.headers.token ?? '', "", { expiresIn: 1 }, (logout, err) => {
+//     if (logout) {
+//       res.send({ msg: 'You have been Logged Out' });
+//     } else {
+//       res.send({err});
+//     }
+//     return UPDATE(res, {
+//     }, "Logged out");
+//   })
+// }

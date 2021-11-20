@@ -10,18 +10,17 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
     }
     const token = req.header("token");
     if (!token) {
-        return sendError(res, 401, "Auth Error")
+        return sendError(res, 401, "Authentication  Error")
 
     }
-
 
     try {
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET ?? "");
         if (decoded.user.id !== req.headers.userid) {
-            return sendError(res, 500, "Unauthorized User.")
+            return sendError(res, 401, "Unauthorized User.")
         }
         next();
-    } catch (e) {
-        return sendError(res, 500, "Invalid token")
+    } catch (e: any) {
+        return sendError(res, 401, e.name === 'TokenExpiredError' ? e.message : "Invalid token")
     }
 };
