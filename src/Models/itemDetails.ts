@@ -25,7 +25,7 @@ var itemSchema = new schema({
     required: true,
     min:0
     },
-    shopId: {
+    sellerId: {
         type:mongoose.Schema.Types.ObjectId,
         required:[true,'Shop Id required.']
     },

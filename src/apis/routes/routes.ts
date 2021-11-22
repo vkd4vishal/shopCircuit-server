@@ -1,7 +1,8 @@
 import express from 'express'
 import { signUp, updateUserImage, validateUser, validateFile, getProfile, deleteUser, updateUserProfile, login } from '../controllers'
-import { upload, userProfileValidator, userImageReqValidator, updateUserProfileValidator, userLoginValidator } from '../validators'
+import { upload, userProfileValidator, userImageReqValidator, updateUserProfileValidator, userLoginValidator,updateItemDetailsValidator, deleteItemHeaderValidator, updateItemHeaderValidator } from '../validators'
 import { validateBody, validateHeaders, auth } from '../../utils';
+import { deleteItemDetails, updateItemDetails } from '../controllers/item';
 
 export const router = express.Router();
 
@@ -14,6 +15,10 @@ router.delete('/deleteUser', validateHeaders(userImageReqValidator), validateUse
 
 router.put('/updateUserProfile', validateHeaders(userImageReqValidator), validateBody(updateUserProfileValidator), validateUser, updateUserProfile);
 router.put('/login', validateBody(userLoginValidator), login);
+router.put('/updateItemDetails',validateHeaders(updateItemHeaderValidator),
+validateBody(updateItemDetailsValidator), updateItemDetails);
+router.delete('/deleteItemDetails',validateHeaders(deleteItemHeaderValidator),
+ deleteItemDetails);
 
 
 
