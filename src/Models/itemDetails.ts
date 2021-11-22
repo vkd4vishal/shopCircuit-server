@@ -6,7 +6,7 @@ var itemSchema = new schema({
     itemName: {
         type: String,
         minLength: 1,
-        maxLength: 20,
+        maxLength: 50,
         required: [true, 'You must enter item name.'],
     },
     price: {
@@ -16,22 +16,25 @@ var itemSchema = new schema({
         min:0
     },
     category: {
-        type: String,
-        minLength: 1,
-        maxLength: 20,
+        type:mongoose.Schema.Types.ObjectId,
         required: [true, 'Category required.'],
     },
-    image: {
-        type: String,
-        required: [true]
-    },
-
     weight: {
-        type: Number,
+    type: Number,
     default: 0,
     required: true,
     min:0
-    }
+    },
+    shopId: {
+        type:mongoose.Schema.Types.ObjectId,
+        required:[true,'Shop Id required.']
+    },
+    brand: {
+        type: String,
+        minLength: 1,
+        maxLength: 20,
+        required: [true, 'You must enter brand.'],
+    },
 });
 
 // Compile model from schema
