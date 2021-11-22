@@ -86,6 +86,8 @@ export const deleteUser: RequestHandler = async (req: Request, res: Response) =>
       gfs.delete(file._id)
     })
   })
+      // @TODO: item Images to be deleted related to the seller
+
   return DELETE(res, {}, "User Profile");
 };
 
