@@ -2,7 +2,8 @@ import express from 'express'
 import { signUp, updateUserImage, validateUser, validateFile, getProfile, deleteUser, updateUserProfile, login } from '../controllers'
 import { upload, userProfileValidator, userImageReqValidator, updateUserProfileValidator, userLoginValidator,updateItemDetailsValidator, deleteItemHeaderValidator, updateItemHeaderValidator } from '../validators'
 import { validateBody, validateHeaders, auth } from '../../utils';
-import { deleteItemDetails, updateItemDetails } from '../controllers/item';
+import { deleteItemDetails, updateItemDetails, addItemDetails } from '../controllers/item';
+import { itemDetailsValidator } from '../validators/itemDetails';
 
 export const router = express.Router();
 
@@ -15,11 +16,14 @@ router.delete('/deleteUser', validateHeaders(userImageReqValidator), validateUse
 
 router.put('/updateUserProfile', validateHeaders(userImageReqValidator), validateBody(updateUserProfileValidator), validateUser, updateUserProfile);
 router.put('/login', validateBody(userLoginValidator), login);
-router.put('/updateItemDetails',validateHeaders(updateItemHeaderValidator),
-validateBody(updateItemDetailsValidator), updateItemDetails);
-router.delete('/deleteItemDetails',validateHeaders(deleteItemHeaderValidator),
- deleteItemDetails);
 
+
+/** Item Details and Image */
+router.post('/addItemDetails', validateBody(itemDetailsValidator),addItemDetails)
+router.put('/updateItemDetails', validateHeaders(updateItemHeaderValidator),
+    validateBody(updateItemDetailsValidator), updateItemDetails);
+router.delete('/deleteItemDetails', validateHeaders(deleteItemHeaderValidator),
+    deleteItemDetails);
 
 
 

@@ -114,3 +114,15 @@ export const deleteItemDetails: RequestHandler = async (
 
     return DELETE(res, result, "Item");
   }
+
+export const addItemDetails: RequestHandler = async (req: Request, res: Response) => {
+    const { sellerId } = req.headers;
+    const record = await userModel.findOne({ userId: sellerId, isSeller: true });
+    if(!record){
+        return sendError(res, 406, "You are not a seller" )
+    }
+
+    let newItem = new itemModel({...req.body,sellerId})
+    const result = await newItem.save();
+    return CREATE(res, result, "Item");
+};
