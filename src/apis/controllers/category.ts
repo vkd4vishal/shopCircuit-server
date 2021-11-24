@@ -20,11 +20,11 @@ interface getCategoryQuery {
 export const getCategories: RequestHandler = async (req: Request, res: Response) => {
     const { page = 1, limit = 30, sort='categoryName', order=1, ...filters } = req.query as unknown as getCategoryQuery
 
-    // const data = await categoryModel.paginate({ ...filters }, {
-    //     sort: { [sort]: order },
-    //     limit: limit,
-    //     offset: limit * (page - 1),
-    //     page: page
-    // })
+    const data = await categoryModel.paginate({ ...filters }, {
+        sort: { [sort]: order },
+        limit: limit,
+        offset: limit * (page - 1),
+        page: page
+    })
     return GET(res, {}, "Categories");
 }

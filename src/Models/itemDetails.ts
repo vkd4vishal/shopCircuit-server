@@ -1,9 +1,17 @@
 
-import mongoose from "mongoose"
+import  {Schema,model,Types,Document,PaginateModel} from "mongoose"
 import mongoosePaginate from 'mongoose-paginate-v2'
-let schema = mongoose.Schema;
+// const=mongoose
 
-var itemSchema = new schema({
+export interface itemDetailSchemaType extends Document  {
+    itemName:string,
+    price:number,
+    category:Types.ObjectId,
+    weight:number,
+    sellerId:Types.ObjectId,
+    brand:string
+}
+var itemSchema = new Schema<itemDetailSchemaType>({
     itemName: {
         type: String,
         minLength: 1,
@@ -17,7 +25,7 @@ var itemSchema = new schema({
         min: 0
     },
     category: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         required: [true, 'Category required.'],
     },
     weight: {
@@ -27,7 +35,7 @@ var itemSchema = new schema({
         min: 0
     },
     sellerId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         required: [true, 'Shop Id required.']
     },
     brand: {
@@ -38,5 +46,6 @@ var itemSchema = new schema({
     },
 });
 itemSchema.plugin(mongoosePaginate)
-export const itemModel = mongoose.model('Items', itemSchema);
+interface itemModel<T extends Document> extends PaginateModel<T> {}
+export const itemModel:itemModel<itemDetailSchemaType>  = model<itemDetailSchemaType>('Items', itemSchema) as itemModel<itemDetailSchemaType>;
 

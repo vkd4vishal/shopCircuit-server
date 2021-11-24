@@ -1,5 +1,5 @@
 import { Request, Response, RequestHandler } from "express";
-import { itemModel, categoryModel, userModel } from "../../Models/index";
+import { itemModel, categoryModel, userModel,itemDetailSchemaType } from "../../Models/index";
 import { CREATE, sendError, GET, DELETE, UPDATE } from "../../utils";
 import mongoose from "mongoose";
 
@@ -33,15 +33,15 @@ export const validateItemWithSeller = async (
   sellerId: string,
   res: any
 ) => {
-  const [seller, item] = await Promise.all([
-    validateSeller(sellerId, res),
-    validateItem(itemId, res)
-  ])
-  console.log({
-    seller,
-    item
-  })
-  const record = await itemModel.findOne({
+  // const [seller, item] :[seller:any,item:mongoose.HydratedDocument<itemDetailSchemaType>|null]=  await Promise.all([
+  //   validateSeller(sellerId, res),
+  //   validateItem(itemId, res)
+  // ])
+  const item =    await validateItem(itemId, res)
+  const seller = await    validateSeller(sellerId, res)
+
+
+  const record= await itemModel.findOne({
     sellerId: new mongoose.Types.ObjectId(sellerId?.toString()),
     _id: new mongoose.Types.ObjectId(itemId?.toString()),
   });
@@ -49,16 +49,16 @@ export const validateItemWithSeller = async (
     return sendError(
       res,
       500,
-      // `The selected item ${item.itemName}  doesn't belong to the seller `
-      `The selected item   doesn't belong to the seller ${seller.userName}`
+      `The selected item ${item?.itemName}  doesn't belong to the seller `
 
     );
   }
 };
 export const validateItem = async (itemId: string, res: Response) => {
-  const record = await itemModel.findOne({
+  const record :mongoose.HydratedDocument<itemDetailSchemaType>|null= await itemModel.findOne({
     _id: new mongoose.Types.ObjectId(itemId?.toString()),
   })
+  console.log('record',record?.itemName)
   if (!record) {
     return sendError(res, 500, "The item selected doesn't exist");
   }
@@ -74,7 +74,7 @@ export const validateCategory = async (categoryId: string, res: Response) => {
   return record;
 }
 export const validateSeller = async (sellerId: string, res: Response) => {
-  const record = await userModel.findOne({
+  const record  = await userModel.findOne({
     _id: new mongoose.Types.ObjectId(sellerId?.toString()),
     isSeller: true
   });
@@ -144,12 +144,12 @@ interface getItemsQuery {
 export const getItems: RequestHandler = async (req: Request, res: Response) => {
   const { page=1,limit=30,sort='itemName',order=1,...filters}=req.query as unknown as  getItemsQuery 
   
-  // const data = await itemModel.paginate({...filters},{
-  //   sort:{[sort]:order},
-  //   limit :limit,
-  //   offset:limit*(page-1),
-  //   page:page
-  // })
+  const data = await itemModel.paginate({...filters},{
+    sort:{[sort]:order},
+    limit :limit,
+    offset:limit*(page-1),
+    page:page
+  })
   return GET(res, {}, "Items");
 }
 
