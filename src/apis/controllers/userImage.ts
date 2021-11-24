@@ -27,7 +27,7 @@ export const validateFile = (req: Request, res: Response, next: NextFunction) =>
 }
 
 export const validateUser: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
-
+  
   const userId = req.headers.userid
 
   const userExist = await userModel.findOne({ _id: new mongoose.Types.ObjectId(userId?.toString()) })
