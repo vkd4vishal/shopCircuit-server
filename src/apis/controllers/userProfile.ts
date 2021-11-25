@@ -35,6 +35,9 @@ export const getProfile: RequestHandler = async (
   if (!userProfile) {
     return sendError(res, 302, "This user does not exist");
   }
+  //removing password from the object so that it is not returned to the response
+  // let userProfile:{password?:string}=record
+  // delete userProfile.password //@TODO: to be fixed 
 
   function getImages() {
     return new Promise(function (resolve, reject) {

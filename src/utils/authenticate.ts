@@ -1,11 +1,11 @@
-import { Request, Response, RequestHandler, NextFunction } from "express";
-
-import jwt from "jsonwebtoken"
+import { NextFunction, Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import { sendError } from "./index";
 
+
 export const auth = (req: Request, res: Response, next: NextFunction) => {
-    const excludedUrls=new Map([['/login','PUT'],['/signup','POST']])
-    if((excludedUrls.has(req.url) && excludedUrls.get(req.url)===req.method) || req.method==='GET'){
+    const excludedUrls = new Map([['/login', 'PUT'], ['/signup', 'POST']])
+    if ((excludedUrls.has(req.url) && excludedUrls.get(req.url) === req.method) || req.method === 'GET') {
         return next()
     }
     const token = req.header("token");
@@ -14,7 +14,7 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
 
     }
 
-   
+
     try {
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET ?? "");
         if (decoded.user.id !== req.headers.userid) {

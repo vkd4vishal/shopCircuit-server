@@ -1,62 +1,65 @@
+import { Document, model, Schema } from "mongoose";
 
-import  mongoose from "mongoose"
-let schema = mongoose.Schema;
-
-var userSchema = new schema({
+export interface userSchemaType extends Document {
+    userName: string,
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    address: string,
+    isSeller: boolean,
+    aadharNumber: number
+}
+let userSchema = new Schema<userSchemaType>({
     userName: {
-      type: String,
-      minLength: 1,
-      maxLength: 20,
-      required: [true, 'You must enter username'],
-      index: { unique: true } 
+        type: String,
+        minLength: 1,
+        maxLength: 20,
+        required: [true, 'You must enter username'],
+        index: { unique: true }
     },
-    email:{
+    email: {
         type: String,
         minLength: 1,
         maxLength: 20,
         required: [true, 'You must enter email.'],
-        index: { unique: true } 
+        index: { unique: true }
     },
     password: {
-      type: String,
-      minLength: 1,
-      maxLength: 128,
-      required: [true, 'You must enter a password.']
+        type: String,
+        minLength: 1,
+        maxLength: 128,
+        required: [true, 'You must enter a password.']
     },
-    firstName:{
-        type:String,
+    firstName: {
+        type: String,
         minLength: 1,
         maxLength: 20, required: [true, 'You must enter first name.'],
     },
-    
-    lastName:{
-        type:String,
+
+    lastName: {
+        type: String,
         minLength: 1,
         maxLength: 20, required: [true, 'You must enter last name.'],
     },
-    
-    
-    address:{
-        type:String,
+
+
+    address: {
+        type: String,
         minLength: 1,
         maxLength: 50, required: [true, 'You must enter address.'],
     },
-    isSeller:{
+    isSeller: {
         type: Boolean,
-        required:[true,'Are you a seller?.']
+        required: [true, 'Are you a seller?.']
     },
-    aadharNumber:{
+    aadharNumber: {
         type: Number,
-        required:[true,'Aadhar Number is required.'],
+        required: [true, 'Aadhar Number is required.'],
         min: 100000000000,
         max: 999999999999
-    },
-    // photo:
-    // {
-    //     contentType: String,
-    //     required:[false,'Please upload your image.']
-    // }
-  });
+    }
+});
+// interface userModel<T extends Document> {}
 
-// Compile model from schema
-export const userModel = mongoose.model('User', userSchema );
+export const userModel = model<userSchemaType>('User', userSchema);

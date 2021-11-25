@@ -14,13 +14,13 @@ export const updateItemDetailsValidator = Joi.object({
 export const updateItemHeaderValidator = Joi.object({
     itemid: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(), 
     categoryid:Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(), 
-    sellerid:Joi.string().regex(/^[0-9a-fA-F]{24}$/).required()
+    userid:Joi.string().regex(/^[0-9a-fA-F]{24}$/).required()
 }); 
 export const deleteItemHeaderValidator = Joi.object({
     itemid: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(), 
-    sellerid:Joi.string().regex(/^[0-9a-fA-F]{24}$/).required()
+    userid:Joi.string().regex(/^[0-9a-fA-F]{24}$/).required()
 }); 
 export const addItemHeaderValidator = Joi.object({
     categoryid: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(), 
-    sellerid:Joi.string().regex(/^[0-9a-fA-F]{24}$/).required()
+    userid:Joi.string().regex(/^[0-9a-fA-F]{24}$/).required()
 }); 

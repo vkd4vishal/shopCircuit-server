@@ -11,7 +11,7 @@ export interface itemDetailSchemaType extends Document  {
     sellerId:Types.ObjectId,
     brand:string
 }
-var itemSchema = new Schema<itemDetailSchemaType>({
+let itemSchema = new Schema<itemDetailSchemaType>({
     itemName: {
         type: String,
         minLength: 1,

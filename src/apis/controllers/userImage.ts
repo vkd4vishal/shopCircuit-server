@@ -1,9 +1,8 @@
-import { Request, Response, RequestHandler, NextFunction } from "express";
-import { userModel, userProfileImagesModel } from "../../Models/index";
-import mongoose from 'mongoose'
-import { CREATE, sendError, UPDATE } from "../../utils";
-import { gfs } from '../../index'
-import { upload } from "../validators";
+import { NextFunction, Request, RequestHandler, Response } from "express";
+import mongoose from 'mongoose';
+import { gfs } from '../../index';
+import { userModel } from "../../Models/index";
+import { sendError, UPDATE } from "../../utils";
 
 
 export const validateFile = (req: Request, res: Response, next: NextFunction) => {
@@ -27,7 +26,7 @@ export const validateFile = (req: Request, res: Response, next: NextFunction) =>
 }
 
 export const validateUser: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
-  
+
   const userId = req.headers.userid
 
   const userExist = await userModel.findOne({ _id: new mongoose.Types.ObjectId(userId?.toString()) })
