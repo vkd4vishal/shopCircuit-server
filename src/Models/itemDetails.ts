@@ -1,7 +1,6 @@
 
 import  {Schema,model,Types,Document,PaginateModel} from "mongoose"
 import mongoosePaginate from 'mongoose-paginate-v2'
-// const=mongoose
 
 export interface itemDetailSchemaType extends Document  {
     itemName:string,

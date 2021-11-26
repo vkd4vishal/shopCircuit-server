@@ -1,12 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
-import { sendError } from './utils';
 
 const options = {
   abortEarly: false,
   allowUnknown: true,
   stripUnknown: true,
 };
-
+const sendValidationError = (res: Response, error: any)=>{
+  return res.status(442).send(`Validation error: ${error}.`)
+}
 export const validateBody = (schema: any) => (
   req: Request,
   res: Response,
@@ -16,10 +17,9 @@ export const validateBody = (schema: any) => (
   const { error } = schema.validate(req.body, options);
 
   if (error) {
-    return sendError(
+    return sendValidationError(
       res,
-      442,
-      `Validation error: ${error.details[0].message}.`
+      error.details[0].message
     )
   }
   next();
@@ -29,14 +29,15 @@ export const validateHeaders = (schema: any) => (
   res: Response,
   next: NextFunction,
 ) => {
+  console.log('validate headers')
   const { error } = schema.validate(req.headers, options);
 
   if (error) {
-    return sendError(
+    return sendValidationError(
       res,
-      442,
-      `Validation error: ${error.details[0].message}.`
+      error.details[0].message
     )
+    return res.status(442).send(`${error.details[0].message}`)
   }
   next();
 }

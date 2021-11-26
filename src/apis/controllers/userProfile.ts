@@ -1,10 +1,10 @@
-import { Request, Response, RequestHandler } from "express";
-import { userModel } from "../../Models/index";
 import bcrypt from "bcrypt";
-import { CREATE, sendError, GET, DELETE, UPDATE } from "../../utils";
-import mongoose from 'mongoose'
-import { gfs } from '../../index'
-import jwt from 'jsonwebtoken'
+import { Request, RequestHandler, Response } from "express";
+import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
+import { gfs } from '../../index';
+import { userModel } from "../../Models/index";
+import { CREATE, DELETE, GET, sendError, UPDATE } from "../../utils";
 
 
 
@@ -13,11 +13,11 @@ export const signUp: RequestHandler = async (req: Request, res: Response) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   const record = await userModel.findOne({ userName });
   if (record) {
-    return sendError(res, 403, "Username already exists.");
+    return sendError(403, "Username already exists.");
   }
   const emailRecord = await userModel.findOne({ email });
   if (emailRecord) {
-    return sendError(res, 403, "Email already used.");
+    return sendError(403, "Email already used.");
   }
   let newUser = new userModel({ ...req.body, password: hashedPassword });
   const result = await newUser.save()
@@ -33,7 +33,7 @@ export const getProfile: RequestHandler = async (
     _id: new mongoose.Types.ObjectId(userId?.toString()),
   });
   if (!userProfile) {
-    return sendError(res, 404, "This user does not exist");
+    return sendError(404, "This user does not exist");
   }
   //removing password from the object so that it is not returned to the response
   // let userProfile:{password?:string}=record
@@ -67,11 +67,11 @@ export const updateUserProfile: RequestHandler = async (
     _id: { $ne: new mongoose.Types.ObjectId(userId?.toString()) },
   });
   if (record) {
-    return sendError(res, 403, "Username already exists.");
+    return sendError(403, "Username already exists.");
   }
   const emailRecord = await userModel.findOne({ email, _id: { $ne: new mongoose.Types.ObjectId(userId?.toString()) } });
   if (emailRecord) {
-    return sendError(res, 403, "Email already used.");
+    return sendError(403, "Email already used.");
   }
   const result = await userModel.findOneAndUpdate(
     { _id: new mongoose.Types.ObjectId(userId?.toString()) },
@@ -89,7 +89,7 @@ export const deleteUser: RequestHandler = async (req: Request, res: Response) =>
       gfs.delete(file._id)
     })
   })
-      // @TODO: item Images to be deleted related to the seller
+  // @TODO: item Images to be deleted related to the seller
 
   return DELETE(res, {}, "User Profile");
 };
@@ -101,18 +101,18 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
 
     user = await userModel.findOne({ userName });
     if (!user) {
-      return sendError(res, 404, "Username does not exist.");
+      return sendError( 404, "Username does not exist.");
     }
 
   } else {
     user = await userModel.findOne({ email });
     if (!user) {
-      return sendError(res, 404, "Email does not exist.");
+      return sendError( 404, "Email does not exist.");
     }
   }
   const isValidPassword = await bcrypt.compare(password, user.password);
   if (!isValidPassword) {
-    return sendError(res, 401, "Invalid Password.");
+    return sendError( 401, "Invalid Password.");
 
   }
 

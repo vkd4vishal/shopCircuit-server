@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { sendError } from "./index";
 
 
 export const auth = (req: Request, res: Response, next: NextFunction) => {
@@ -10,17 +9,18 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
     }
     const token = req.header("token");
     if (!token) {
-        return sendError(res, 401, "Authentication  Error")
+        return res.status(401).send("Authentication  Error")
 
     }
 
     try {
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET ?? "");
         if (decoded.user.id !== req.headers.userid) {
-            return sendError(res, 401, "Unauthorized User.")
+            return res.status(401).send("Unauthorized User.")
+
         }
         next();
     } catch (e: any) {
-        return sendError(res, 401, e.name === 'TokenExpiredError' ? e.message : "Invalid token")
+        return res.status(401).send(e.name === 'TokenExpiredError' ? e.message : "Invalid token")
     }
 };

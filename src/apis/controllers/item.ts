@@ -20,7 +20,6 @@ export const validateItemWithCategory = async (
   });
   if (!record) {
     return sendError(
-      res,
       500,
       `The item ${item?.itemName} selected doesn't belong to the category ${category?.categoryName}`
 
@@ -41,20 +40,19 @@ export const validateItemWithSeller = async (
   });
   if (!record) {
     return sendError(
-      res, 
       500,
       `The selected item ${item?.itemName}  doesn't belong to the seller ${seller?.userName}`
 
-    ); 
+    );
   }
-  return {record,item,seller}
+  return { record, item, seller }
 };
 export const validateItem = async (itemId: string, res: Response) => {
   const record = await itemModel.findOne({
     _id: new mongoose.Types.ObjectId(itemId?.toString()),
   })
   if (!record) {
-    return sendError(res, 500, "The item selected doesn't exist");
+    return sendError(500, "The item selected doesn't exist");
   }
   return record
 }
@@ -63,7 +61,7 @@ export const validateCategory = async (categoryId: string, res: Response) => {
     _id: new mongoose.Types.ObjectId(categoryId?.toString()),
   });
   if (!record) {
-    return sendError(res, 500, "The selected category  doesn't exist");
+    return sendError(500, "The selected category  doesn't exist");
   }
   return record;
 }
@@ -73,7 +71,7 @@ export const validateSeller = async (sellerId: string, res: Response) => {
     isSeller: true
   });
   if (!record) {
-    return sendError(res, 500, "The seller selected doesn't exist");
+    return sendError(500, "The seller selected doesn't exist");
   }
   return record
 }
@@ -87,8 +85,8 @@ export const updateItemDetails: RequestHandler = async (
     categoryid,
     userid,
   }: { itemid: string; categoryid: string; userid: string } = headers
-  const sellerid=userid
-  await Promise.all([ 
+  const sellerid = userid
+  await Promise.all([
     validateItemWithCategory(itemid, categoryid, res),
     validateItemWithSeller(itemid, sellerid, res),
   ])
@@ -97,7 +95,7 @@ export const updateItemDetails: RequestHandler = async (
     { ...req.body, category: categoryid, sellerId: sellerid }
   )
 
-  return UPDATE(res, {result}, "Item");
+  return UPDATE(res, { result }, "Item");
 }
 export const deleteItemDetails: RequestHandler = async (
   req: Request,
@@ -108,7 +106,7 @@ export const deleteItemDetails: RequestHandler = async (
     itemid,
     userid,
   }: { itemid: string; userid: string } = headers;
-  const sellerid=userid
+  const sellerid = userid
   await validateItemWithSeller(itemid, sellerid, res)
   // @TODO: Images to be deleted related to the item
   const result = await itemModel.deleteOne({ _id: new mongoose.Types.ObjectId(itemid?.toString()) })
@@ -120,10 +118,10 @@ export const addItemDetails: RequestHandler = async (req: Request, res: Response
   const sellerId = req.headers.userid
   const record = await userModel.findOne({ userId: sellerId, isSeller: true });
   if (!record) {
-    return sendError(res, 406, "You are not a seller")
+    return sendError(406, "You are not a seller")
   }
 
-  let newItem = new itemModel({ ...req.body, sellerId: req.headers.sellerid, category: req.headers.categoryid })
+  let newItem = new itemModel({ ...req.body, sellerId, category: req.headers.categoryid })
   const result = await newItem.save();
   return CREATE(res, result, "Item");
 };
