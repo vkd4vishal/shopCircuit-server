@@ -12,7 +12,7 @@ export const db = connectDB()
 export let gfs: any;
 db.once('open', () => {
   gfs = new mongoose.mongo.GridFSBucket(db.db, {
-    bucketName: 'userProfileImages'
+    bucketName: 'itemImages'
   })
 });
 const app = express()

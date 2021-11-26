@@ -8,7 +8,7 @@ export const router = express.Router();
 /*** User Profile and Image ***/
 router.post('/signup', validateBody(userProfileValidator), handleError(signUp));
 router.post('/updateUserImage',  
-    validateHeaders(userImageReqValidator), validateUser, upload.single('photo'), validateFile, handleError(updateUserImage));
+    validateHeaders(userImageReqValidator), validateUser, upload.array('photo', 2), validateFile, handleError(updateUserImage));
 router.get('/getProfile', validateHeaders(userImageReqValidator), validateUser, handleError(getProfile))
 router.delete('/deleteUser', validateHeaders(userImageReqValidator), validateUser, handleError(deleteUser))
 

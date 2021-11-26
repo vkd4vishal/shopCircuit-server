@@ -25,7 +25,7 @@ const storage = new GridFsStorage({
             const filename = req.headers.userid + '.png';
             const fileInfo = {
                 filename: filename,
-                bucketName: 'userProfileImages'
+                bucketName: 'itemImages'
             };
             resolve(fileInfo);
         });
