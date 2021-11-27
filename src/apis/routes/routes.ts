@@ -15,6 +15,7 @@ import {
   deleteItem,
   deleteUser,
   getCategories,
+  getItemDetails,
   getItems,
   getProfile,
   login,
@@ -93,6 +94,7 @@ router.delete(
   handleError(deleteItem)
 );
 router.get("/getItems", handleError(getItems));
+router.get("/getItemDetails", handleError(getItemDetails))
 /*** Categories */
 router.post(
   "/addCategory",
