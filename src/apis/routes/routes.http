@@ -66,7 +66,7 @@ token:{{token}}
     "itemName": "fan",
     "price": 1000,
     "weight": 1000,
-    "brand": "sangharsh fans"
+    "brand": "Tin fans"
 }
 ### update ItemDetails
 POST  /updateItemDetails HTTP/1.1
@@ -75,12 +75,13 @@ Content-Type: application/json
 userId:{{userid}}
 categoryId:{{categoryId}}
 token:{{token}}
+itemId:{{itemId}}
 
 {
-    "itemName": "bulb"
+    "brand": "Tin Electrical"
 }
 ### GET getItems
-GET  /getItems HTTP/1.1
+GET  /getItems?search=Sankar HTTP/1.1
 Host:{{host}}
 Content-Type: application/json
 

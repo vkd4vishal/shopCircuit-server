@@ -45,6 +45,8 @@ let itemSchema = new Schema<itemDetailSchemaType>({
     },
 });
 itemSchema.plugin(mongoosePaginate)
+itemSchema.index({ brand : 'text',itemName : 'text' })
+
 interface itemModel<T extends Document> extends PaginateModel<T> {}
 export const itemModel:itemModel<itemDetailSchemaType>  = model<itemDetailSchemaType>('Items', itemSchema) as itemModel<itemDetailSchemaType>;
 

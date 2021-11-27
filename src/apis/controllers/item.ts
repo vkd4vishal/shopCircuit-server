@@ -140,6 +140,7 @@ interface getItemsQuery {
   limit: number;
   sort: string;
   order: number;
+  search: string;
   filters: any;
 }
 export const getItems: RequestHandler = async (req: Request, res: Response) => {
@@ -148,11 +149,15 @@ export const getItems: RequestHandler = async (req: Request, res: Response) => {
     limit = 30,
     sort = "itemName",
     order = 1,
+    search = "",
     ...filters
   } = req.query as unknown as getItemsQuery;
-
+  let where = {};
+  if (search) {
+    where = { ...where, $text: { $search: `${search}` } };
+  }
   const data = await itemModel.paginate(
-    { ...filters },
+    { ...where, ...filters },
     {
       sort: { [sort]: order },
       limit: limit,
