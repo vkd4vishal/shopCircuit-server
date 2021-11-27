@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import { Request, RequestHandler, Response } from "express";
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-import { gfs } from '../../index';
+import { userImageGfs } from '../../index';
 import { userModel } from "../../Models/index";
 import { CREATE, DELETE, GET, sendError, UPDATE } from "../../utils";
 
@@ -41,7 +41,7 @@ export const getProfile: RequestHandler = async (
 
   function getImages() {
     return new Promise(function (resolve, reject) {
-      gfs
+      userImageGfs
         .find({ filename: userId?.toString() + ".png" })
         .toArray(function (err: any, files: any) {
           if (err) {
@@ -52,7 +52,7 @@ export const getProfile: RequestHandler = async (
     });
   }
   const userImage: any = await getImages();
-  // console.log('image',  gfs.openDownloadStreamByName(userImage.filename)) //don't remove this code. will be needed during UI development
+  // console.log('image',  userImageGfs.openDownloadStreamByName(userImage.filename)) //don't remove this code. will be needed during UI development
   return GET(res, { userProfile, userImage }, "User Profile");
 };
 
@@ -84,9 +84,9 @@ export const deleteUser: RequestHandler = async (req: Request, res: Response) =>
   const userId = req.headers.userid
   await userModel.deleteOne({ _id: new mongoose.Types.ObjectId(userId?.toString()) })
 
-  gfs.find({ filename: userId?.toString() + '.png' }).toArray((err: any, files: any) => {
+  userImageGfs.find({ filename: userId?.toString() + '.png' }).toArray((err: any, files: any) => {
     files.forEach((file: any) => {
-      gfs.delete(file._id)
+      userImageGfs.delete(file._id)
     })
   })
   // @TODO: item Images to be deleted related to the seller

@@ -1,4 +1,5 @@
 export * from './userProfile'
-export * from './userImage'
+export * from './itemImages'
 export * from './item'
 export * from './category'
+export * from './userImage'

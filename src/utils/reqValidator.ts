@@ -29,7 +29,6 @@ export const validateHeaders = (schema: any) => (
   res: Response,
   next: NextFunction,
 ) => {
-  console.log('validate headers')
   const { error } = schema.validate(req.headers, options);
 
   if (error) {
@@ -37,7 +36,6 @@ export const validateHeaders = (schema: any) => (
       res,
       error.details[0].message
     )
-    return res.status(442).send(`${error.details[0].message}`)
   }
   next();
 }

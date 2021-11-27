@@ -32,8 +32,27 @@ const storage = new GridFsStorage({
     }
 })
 
-export const upload = multer({
+export const uploadUserImage = multer({
     storage, limits: {
+        fileSize: 1024 * 1024 * 4
+    }, fileFilter
+})
+
+const itemStorage = new GridFsStorage({
+    url: connectString,
+    file: (req: any, file: any) => {
+        return new Promise((resolve, reject) => {
+            const filename = req.headers.itemid + '.png';
+            const fileInfo = {
+                filename: filename,
+                bucketName: 'itemImages'
+            };
+            resolve(fileInfo);
+        });
+    }
+})
+export const uploadItemImage = multer({
+    storage:itemStorage, limits: {
         fileSize: 1024 * 1024 * 4
     }, fileFilter
 })

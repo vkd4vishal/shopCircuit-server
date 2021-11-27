@@ -9,10 +9,13 @@ import { auth } from './utils';
 // const Grid = require('gridfs-stream');
 export const db = connectDB()
 
-export let gfs: any;
+export let userImageGfs: any,itemImageGfs:any;
 db.once('open', () => {
-  gfs = new mongoose.mongo.GridFSBucket(db.db, {
+  userImageGfs = new mongoose.mongo.GridFSBucket(db.db, {
     bucketName: 'userProfileImages'
+  })
+  itemImageGfs = new mongoose.mongo.GridFSBucket(db.db, {
+    bucketName: 'itemImages'
   })
 });
 const app = express()
