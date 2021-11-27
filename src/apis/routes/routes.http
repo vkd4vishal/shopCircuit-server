@@ -1,15 +1,99 @@
 @host = localhost:1234
+@userid= 61a1bc0ce4f4363c63ed458a
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhMWJjMGNlNGY0MzYzYzYzZWQ0NThhIn0sImlhdCI6MTYzNzk4OTg5MiwiZXhwIjoxNjM4MDI1ODkyfQ.AJA-rcFPH-yeUJ8yL39oR-2dZ9x0M6sMPuPyLLdyIeU
+@categoryId=61a1beaee4f4363c63ed4591
+@itemId=61a1c02be4f4363c63ed4594
+### User SignUp 
 
 POST  /signup HTTP/1.1
 Host:{{host}}
 Content-Type: application/json
 
 {
-    "userName": "joinotworking",
-    "password": "sangharsh",
-    "firstName": "shankar",
-    "lastName": "atithee",
-    "address": "bishnu",
-    "isSeller": true,
-    "aadharNumber": 123456789111
+    "userName": "shopkeepers",
+    "firstName": "peter",
+    "lastName": "parker",
+    "password": "S@ngharsh123",
+    "confirmPassword": "S@ngharsh123",
+    "email": "test12454@mail.com",
+    "aadharNumber": 123456799012,
+    "address": "hell",
+    "isSeller": true
 }
+
+### login API
+PUT  /login HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+
+{
+    "userName":"shopkeepers",
+    "password":"S@ngharsh123"
+}
+
+### GET User Profiles
+GET  /getProfile HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+userId:{{userid}}
+
+### Delete User Profiles
+DELETE  /deleteUser HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+userId:{{userid}}
+token:{{token}}
+
+### add Category
+POST  /addCategory HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+userId:{{userid}}
+token:{{token}}
+
+{
+    "categoryName":"Books"
+}
+### add ItemDetails
+POST  /addItemDetails HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+userId:{{userid}}
+categoryId:{{categoryId}}
+token:{{token}}
+
+{
+    "itemName": "fan",
+    "price": 1000,
+    "weight": 1000,
+    "brand": "sangharsh fans"
+}
+### update ItemDetails
+POST  /updateItemDetails HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+userId:{{userid}}
+categoryId:{{categoryId}}
+token:{{token}}
+
+{
+    "itemName": "bulb"
+}
+### GET getItems
+GET  /getItems HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+
+
+### GET Categories
+GET  /getCategories HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+
+### DELETE ItemDetails
+DELETE  /deleteItemDetails HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+userId:{{userid}}
+token:{{token}}
+itemId:{{itemId}}
