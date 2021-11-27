@@ -162,3 +162,26 @@ export const getItems: RequestHandler = async (req: Request, res: Response) => {
   );
   return GET(res, { data }, "Items");
 };
+
+export const getItemDetails: RequestHandler = async (req: Request, res: Response) => {
+  const itemId = req.headers.itemid
+
+  const itemDetails = await itemModel.findOne({
+    _id: new mongoose.Types.ObjectId(itemId?.toString())
+  })
+
+  function getImages() {
+    return new Promise(function (resolve, reject) {
+      itemImageGfs
+        .find({ filename: itemId?.toString() + ".png" })
+        .toArray(function (err: any, files: any) {
+          if (err) {
+            return reject(err);
+          }
+          return resolve(files);
+        });
+    });
+  }
+  const itemImages: any = await getImages();
+  return GET(res, { itemDetails, itemImages }, "Items and its Images");
+}
