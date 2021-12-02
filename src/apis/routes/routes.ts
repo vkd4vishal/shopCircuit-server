@@ -73,7 +73,7 @@ router.put(
   validateUser,
   handleError(updateUserProfile)
 );
-router.put("/login", validateBody(userLoginValidator), handleError(login));
+router.post("/login", validateBody(userLoginValidator), handleError(login));
 
 /** Item Details and Image */
 router.post(
@@ -87,14 +87,14 @@ router.put(
   validateHeaders(updateItemHeaderValidator),
   validateBody(updateItemDetailsValidator),
   handleError(updateItemDetails)
-);
+); 
 router.delete(
   "/deleteItem",
   validateHeaders(deleteItemHeaderValidator),
   handleError(deleteItem)
 );
 router.get("/getItems", handleError(getItems));
-router.get("/getItemDetails", handleError(getItemDetails))
+router.get("/getItemDetails", handleError(getItemDetails));
 /*** Categories */
 router.post(
   "/addCategory",

@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 
 ### login API
-PUT  /login HTTP/1.1
+POST  /login HTTP/1.1
 Host:{{host}}
 Content-Type: application/json
 
