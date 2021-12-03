@@ -21,7 +21,7 @@ let userSchema = new Schema<userSchemaType>({
     email: {
         type: String,
         minLength: 1,
-        maxLength: 20,
+        maxLength: 40,
         required: [true, 'You must enter email.'],
         index: { unique: true }
     },

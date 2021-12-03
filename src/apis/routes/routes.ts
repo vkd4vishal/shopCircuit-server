@@ -26,6 +26,8 @@ import {
   updateUserImage,
   updateUserProfile,
   uploadItemImages,
+  sendOtpToMail,
+  validateOtp
 } from "../controllers";
 import { addToCart, deleteFromCart, updateCartItem } from "../controllers/cart";
 import {
@@ -43,11 +45,13 @@ import {
   userImageReqValidator,
   userLoginValidator,
   userProfileValidator,
+  validateOtpValidator
+  // sendOtpToMailValidator
 } from "../validators";
 
 export const router = express.Router();
 //router.put('/logout', validateHeaders(userImageReqSchema), logout);
-/*** User Profile and Image ***/
+/****************************************** User Profile and Image ******************************************/
 router.post("/signup", validateBody(userProfileValidator), handleError(signUp));
 router.post(
   "/updateUserImage",
@@ -79,7 +83,7 @@ router.put(
 );
 router.post("/login", validateBody(userLoginValidator), handleError(login));
 
-/** Item Details and Image */
+/***************************************** Item Details and Image ****************************************/
 router.post(
   "/addItemDetails",
   validateHeaders(addItemHeaderValidator),
@@ -99,7 +103,7 @@ router.delete(
 );
 router.get("/getItems", handleError(getItems));
 router.get("/getItemDetails", handleError(getItemDetails));
-/*** Categories */
+/********************************************** Categories ***************************************/
 router.post(
   "/addCategory",
   validateBody(categoryValidator),
@@ -145,4 +149,15 @@ router.get(
   validateCustomer,
   validateItem,
   handleError(updateCartItem)
+);
+/*************************************** Forgot Password ***************************************/
+router.post(
+  "/sendOtpToMail",
+  // validateBody(sendOtpToMailValidator),
+  handleError(sendOtpToMail)
+);
+router.post(
+  "/validateOtp",
+  validateBody(validateOtpValidator),
+  handleError(validateOtp)
 );
