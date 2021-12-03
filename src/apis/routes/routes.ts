@@ -1,45 +1,35 @@
 import express from "express";
 import {
-
-  validateImage,
+  handleError, validateBody,
+  validateHeaders, validateImage,
   validateItem,
   validateMultipleImages,
-  validateSeller,
-  validateBody,
-  validateHeaders,
-  handleError,
-  validateUser,
+  validateSeller, validateUser
 } from "../../utils";
 import {
   addCategory,
   addItemDetails,
-  deleteItem,
-  getItemDetails,
-  deleteUser,
-  getCategories,
-  getItems,
+  deleteItem, deleteUser,
+  getCategories, getItemDetails, getItems,
   getProfile,
   login,
   signUp,
   updateItemDetails,
   updateUserImage,
   updateUserProfile,
-  uploadItemImages,
+  uploadItemImages
 } from "../controllers";
 import {
   addItemHeaderValidator,
   categoryValidator,
   deleteItemHeaderValidator,
   itemDetailsValidator,
-  itemImageValidator,
-  uploadItemImage,
-  uploadUserImage,
-  updateItemDetailsValidator,
+  itemImageValidator, updateItemDetailsValidator,
   updateItemHeaderValidator,
-  updateUserProfileValidator,
-  userImageReqValidator,
+  updateUserProfileValidator, uploadItemImage,
+  uploadUserImage, userImageReqValidator,
   userLoginValidator,
-  userProfileValidator,
+  userProfileValidator
 } from "../validators";
 
 export const router = express.Router();
@@ -74,7 +64,7 @@ router.put(
   validateUser,
   handleError(updateUserProfile)
 );
-router.put("/login", validateBody(userLoginValidator), handleError(login));
+router.post("/login", validateBody(userLoginValidator), handleError(login));
 
 /** Item Details and Image */
 router.post(
@@ -95,7 +85,7 @@ router.delete(
   handleError(deleteItem)
 );
 router.get("/getItems", handleError(getItems));
-router.get("/getItemDetails", handleError(getItemDetails))
+router.get("/getItemDetails", handleError(getItemDetails));
 /*** Categories */
 router.post(
   "/addCategory",

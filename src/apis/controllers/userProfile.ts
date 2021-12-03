@@ -129,7 +129,7 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
     })
   return UPDATE(res, {
     token
-  }, "Logged in");
+  }, "");
 };
 
 // export const logout: RequestHandler = async (req: Request, res: Response) => {

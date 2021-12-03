@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 
 export const auth = (req: Request, res: Response, next: NextFunction) => {
-    const excludedUrls = new Map([['/login', 'PUT'], ['/signup', 'POST']])
+    const excludedUrls = new Map([['/login', 'POST'], ['/signup', 'POST']])
     if ((excludedUrls.has(req.url) && excludedUrls.get(req.url) === req.method) || req.method === 'GET') {
         return next()
     }
