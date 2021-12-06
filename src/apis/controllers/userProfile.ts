@@ -31,7 +31,7 @@ export const getProfile: RequestHandler = async (
   const userId = req.headers.userid;
   const userProfile = await userModel.findOne({
     _id: new mongoose.Types.ObjectId(userId?.toString()),
-  });
+  }).select(' userName email firstName lastName address isSeller aadharNumber')
   if (!userProfile) {
     return sendError(404, "This user does not exist");
   }
