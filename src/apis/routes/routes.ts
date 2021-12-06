@@ -27,7 +27,9 @@ import {
   updateUserProfile,
   uploadItemImages,
   sendOtpToMail,
-  validateOtp
+  validateEmailOtp,
+  forgotPassword,
+  changePassword
 } from "../controllers";
 import { addToCart, deleteFromCart, updateCartItem } from "../controllers/cart";
 import {
@@ -45,8 +47,10 @@ import {
   userImageReqValidator,
   userLoginValidator,
   userProfileValidator,
-  validateOtpValidator
-  // sendOtpToMailValidator
+  changePasswordValidator,
+  validateEmailOtpValidator,
+  sendOtpToMailValidator,
+  forgotPasswordValidator
 } from "../validators";
 
 export const router = express.Router();
@@ -153,11 +157,25 @@ router.get(
 /*************************************** Forgot Password ***************************************/
 router.post(
   "/sendOtpToMail",
-  // validateBody(sendOtpToMailValidator),
+  validateBody(sendOtpToMailValidator),
   handleError(sendOtpToMail)
 );
 router.post(
   "/validateOtp",
   validateBody(validateOtpValidator),
   handleError(validateOtp)
+);
+  "/validateEmailOtp",
+  validateBody(validateEmailOtpValidator),
+  handleError(validateEmailOtp)
+);
+router.put(
+  "/forgotPassword",
+  validateBody(forgotPasswordValidator),
+  handleError(forgotPassword)
+);
+router.put(
+  "/changePassword",
+  validateBody(changePasswordValidator),
+  handleError(changePassword)
 );

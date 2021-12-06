@@ -1,12 +1,10 @@
 import bcrypt from "bcrypt";
 import { Request, RequestHandler, Response } from "express";
-import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
-import { userImageGfs } from '../../index';
+import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
+import { userImageGfs } from "../../index";
 import { userModel } from "../../Models/index";
 import { CREATE, DELETE, GET, sendError, UPDATE } from "../../utils";
-
-
 
 export const signUp: RequestHandler = async (req: Request, res: Response) => {
   const { userName, password, email } = req.body;
@@ -20,7 +18,7 @@ export const signUp: RequestHandler = async (req: Request, res: Response) => {
     return sendError(403, "Email already used.");
   }
   let newUser = new userModel({ ...req.body, password: hashedPassword });
-  const result = await newUser.save()
+  const result = await newUser.save();
   return CREATE(res, result, "User Profile");
 };
 
@@ -37,7 +35,7 @@ export const getProfile: RequestHandler = async (
   }
   //removing password from the object so that it is not returned to the response
   // let userProfile:{password?:string}=record
-  // delete userProfile.password //@TODO: to be fixed 
+  // delete userProfile.password //@TODO: to be fixed
 
   function getImages() {
     return new Promise(function (resolve, reject) {
@@ -69,7 +67,10 @@ export const updateUserProfile: RequestHandler = async (
   if (record) {
     return sendError(403, "Username already exists.");
   }
-  const emailRecord = await userModel.findOne({ email, _id: { $ne: new mongoose.Types.ObjectId(userId?.toString()) } });
+  const emailRecord = await userModel.findOne({
+    email,
+    _id: { $ne: new mongoose.Types.ObjectId(userId?.toString()) },
+  });
   if (emailRecord) {
     return sendError(403, "Email already used.");
   }
@@ -80,15 +81,22 @@ export const updateUserProfile: RequestHandler = async (
   return UPDATE(res, result, "User Profile");
 };
 
-export const deleteUser: RequestHandler = async (req: Request, res: Response) => {
-  const userId = req.headers.userid
-  await userModel.deleteOne({ _id: new mongoose.Types.ObjectId(userId?.toString()) })
+export const deleteUser: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const userId = req.headers.userid;
+  await userModel.deleteOne({
+    _id: new mongoose.Types.ObjectId(userId?.toString()),
+  });
 
-  userImageGfs.find({ filename: userId?.toString() + '.png' }).toArray((err: any, files: any) => {
-    files.forEach((file: any) => {
-      userImageGfs.delete(file._id)
-    })
-  })
+  userImageGfs
+    .find({ filename: userId?.toString() + ".png" })
+    .toArray((err: any, files: any) => {
+      files.forEach((file: any) => {
+        userImageGfs.delete(file._id);
+      });
+    });
   // @TODO: item Images to be deleted related to the seller
 
   return DELETE(res, {}, "User Profile");
@@ -96,40 +104,38 @@ export const deleteUser: RequestHandler = async (req: Request, res: Response) =>
 
 export const login: RequestHandler = async (req: Request, res: Response) => {
   const { userName, password, email } = req.body;
-  let user: any = undefined
+  let user = undefined;
   if (userName) {
-
     user = await userModel.findOne({ userName });
     if (!user) {
-      return sendError( 404, "Username does not exist.");
+      return sendError(404, "Username does not exist.");
     }
-
   } else {
     user = await userModel.findOne({ email });
     if (!user) {
-      return sendError( 404, "Email does not exist.");
+      return sendError(404, "Email does not exist.");
     }
   }
   const isValidPassword = await bcrypt.compare(password, user.password);
   if (!isValidPassword) {
-    return sendError( 401, "Invalid Password.");
-
+    return sendError(401, "Invalid Password.");
   }
 
   const payload = {
     user: {
-      id: user._id.toString()
-    }
+      id: user._id.toString(),
+    },
   };
-  const token = jwt.sign(
-    payload,
-    process.env.JWT_SECRET ?? "",
+  const token = jwt.sign(payload, process.env.JWT_SECRET ?? "", {
+    expiresIn: "10h",
+  });
+  return UPDATE(
+    res,
     {
-      expiresIn: '10h'
-    })
-  return UPDATE(res, {
-    token
-  }, "");
+      token,
+    },
+    ""
+  );
 };
 
 // export const logout: RequestHandler = async (req: Request, res: Response) => {

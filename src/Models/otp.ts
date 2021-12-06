@@ -1,13 +1,15 @@
 import { Document, model, Schema } from "mongoose";
 
 export interface otpSchemaType extends Document {
-  otp: number;
+  otp: string;
   email: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 var otpSchema = new Schema<otpSchemaType>(
   {
     otp: {
-      type: Number,
+      type: String,
       required: [true, "You must enter otp."],
       min: 1000,
       max: 9999
