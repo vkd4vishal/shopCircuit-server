@@ -1,25 +1,31 @@
 import express from "express";
 import {
-  handleError, validateBody,
+  handleError,
+  validateBody,
   validateCustomer,
-  validateHeaders, validateImage,
+  validateHeaders,
+  validateImage,
   validateItem,
   validateItemWithSeller,
   validateMultipleImages,
-  validateSeller, validateUser
+  validateSeller,
+  validateUser,
 } from "../../utils";
 import {
   addCategory,
   addItemDetails,
-  deleteItem, deleteUser,
-  getCategories, getItemDetails, getItems,
+  deleteItem,
+  deleteUser,
+  getCategories,
+  getItemDetails,
+  getItems,
   getProfile,
   login,
   signUp,
   updateItemDetails,
   updateUserImage,
   updateUserProfile,
-  uploadItemImages
+  uploadItemImages,
 } from "../controllers";
 import { addToCart, deleteFromCart, updateCartItem } from "../controllers/cart";
 import {
@@ -27,12 +33,16 @@ import {
   categoryValidator,
   deleteItemHeaderValidator,
   itemDetailsValidator,
-  itemImageValidator, quantityValidator, updateItemDetailsValidator,
+  itemImageValidator,
+  quantityValidator,
+  updateItemDetailsValidator,
   updateItemHeaderValidator,
-  updateUserProfileValidator, uploadItemImage,
-  uploadUserImage, userImageReqValidator,
+  updateUserProfileValidator,
+  uploadItemImage,
+  uploadUserImage,
+  userImageReqValidator,
   userLoginValidator,
-  userProfileValidator
+  userProfileValidator,
 } from "../validators";
 
 export const router = express.Router();
@@ -107,7 +117,32 @@ router.post(
 );
 
 /**Cart APIs */
-router.post('/addToCart', validateHeaders(itemImageValidator), validateCustomer, validateItem, handleError(addToCart));
-router.delete('/deleteFromCart', validateHeaders(itemImageValidator), validateCustomer, validateItem, handleError(deleteFromCart));
-router.put('/updateCartItem', validateBody(quantityValidator), validateHeaders(itemImageValidator), validateCustomer, validateItem, handleError(updateCartItem));
-router.get('/getCartItems', validateHeaders(itemImageValidator), validateCustomer, validateItem, handleError(updateCartItem));
+router.post(
+  "/addToCart",
+  validateHeaders(itemImageValidator),
+  validateCustomer,
+  validateItem,
+  handleError(addToCart)
+);
+router.delete(
+  "/deleteFromCart",
+  validateHeaders(itemImageValidator),
+  validateCustomer,
+  validateItem,
+  handleError(deleteFromCart)
+);
+router.put(
+  "/updateCartItem",
+  validateBody(quantityValidator),
+  validateHeaders(itemImageValidator),
+  validateCustomer,
+  validateItem,
+  handleError(updateCartItem)
+);
+router.get(
+  "/getCartItems",
+  validateHeaders(itemImageValidator),
+  validateCustomer,
+  validateItem,
+  handleError(updateCartItem)
+);
