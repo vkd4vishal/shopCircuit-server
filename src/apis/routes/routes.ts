@@ -160,12 +160,7 @@ router.post(
   validateBody(sendOtpToMailValidator),
   handleError(sendOtpToMail)
 );
-router.post(
-  "/validateOtp",
-  validateBody(validateOtpValidator),
-  handleError(validateOtp)
-);
-  "/validateEmailOtp",
+router.post("/validateEmailOtp",
   validateBody(validateEmailOtpValidator),
   handleError(validateEmailOtp)
 );
