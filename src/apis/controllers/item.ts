@@ -126,7 +126,7 @@ export const addItemDetails: RequestHandler = async (
   if (!record) {
     return sendError(406, "You are not a seller");
   }
-
+  
   let newItem = new itemModel({
     ...req.body,
     sellerId,

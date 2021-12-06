@@ -1,8 +1,9 @@
 @host = localhost:1234
-@userid= 61a1bc0ce4f4363c63ed458a
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhMWJjMGNlNGY0MzYzYzYzZWQ0NThhIn0sImlhdCI6MTYzNzk4OTg5MiwiZXhwIjoxNjM4MDI1ODkyfQ.AJA-rcFPH-yeUJ8yL39oR-2dZ9x0M6sMPuPyLLdyIeU
+@userid= 619f2c776c46367d61e27e0e
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE5ZjJjNzc2YzQ2MzY3ZDYxZTI3ZTBlIn0sImlhdCI6MTYzODc3NzEwNywiZXhwIjoxNjM4ODEzMTA3fQ.utzZZWNvZm24lWmzsULBoOn9Y4vCd4Kl1-ccj6Y6pvM
 @categoryId=61a1beaee4f4363c63ed4591
-@itemId=61a1c02be4f4363c63ed4594
+@itemId=61ab02da9297bc948a92a37e
+@sellerId=61ab015577bda86351ad32e2
 ### User SignUp 
 
 POST  /signup HTTP/1.1
@@ -27,8 +28,8 @@ Host:{{host}}
 Content-Type: application/json
 
 {
-    "userName":"shopkeepers",
-    "password":"S@ngharsh123"
+    "userName":"vkd0066",
+    "password":"Vish@l123"
 }
 
 ### GET User Profiles
@@ -98,3 +99,38 @@ Content-Type: application/json
 userId:{{userid}}
 token:{{token}}
 itemId:{{itemId}}
+
+### POST addToCart
+
+POST  /addToCart HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+userId:{{userid}}
+itemId:{{itemId}}
+token:{{token}}
+
+
+
+
+### DELETE deleteFromCart
+
+DELETE  /deleteFromCart HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+userId:{{userid}}
+itemId:{{itemId}}
+token:{{token}}
+
+
+### update deleteFromCart
+
+PUT  /updateCartItem HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+userId:{{userid}}
+itemId:{{itemId}}
+token:{{token}}
+
+{
+    "quantity": 10
+}

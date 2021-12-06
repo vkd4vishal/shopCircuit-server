@@ -33,7 +33,23 @@ export const validateSeller: RequestHandler = async (
   }
   next();
 };
-export const validateItem: RequestHandler = async (
+export const validateCustomer: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.headers.userid;
+
+  const customer = await userModel.findOne({
+    _id: new mongoose.Types.ObjectId(userId?.toString()),
+    isSeller: false,
+  });
+  if (!customer) {
+    return res.status(404).send("Customer does not exist");
+  }
+  next();
+};
+export const validateItemWithSeller: RequestHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -47,6 +63,21 @@ export const validateItem: RequestHandler = async (
   });
   if (!item) {
     return res.status(404).send("Item does not belong to current Seller.");
+  }
+  next();
+};
+export const validateItem: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const itemId = req.headers.itemid;
+
+  const item = await itemModel.findOne({
+    _id: new mongoose.Types.ObjectId(itemId?.toString())
+  });
+  if (!item) {
+    return res.status(404).send("Item does not exist.");
   }
   next();
 };

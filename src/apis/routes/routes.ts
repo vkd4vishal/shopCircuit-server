@@ -1,8 +1,10 @@
 import express from "express";
 import {
   handleError, validateBody,
+  validateCustomer,
   validateHeaders, validateImage,
   validateItem,
+  validateItemWithSeller,
   validateMultipleImages,
   validateSeller, validateUser
 } from "../../utils";
@@ -19,12 +21,13 @@ import {
   updateUserProfile,
   uploadItemImages
 } from "../controllers";
+import { addToCart, deleteFromCart, updateCartItem } from "../controllers/cart";
 import {
   addItemHeaderValidator,
   categoryValidator,
   deleteItemHeaderValidator,
   itemDetailsValidator,
-  itemImageValidator, updateItemDetailsValidator,
+  itemImageValidator, quantityValidator, updateItemDetailsValidator,
   updateItemHeaderValidator,
   updateUserProfileValidator, uploadItemImage,
   uploadUserImage, userImageReqValidator,
@@ -97,8 +100,14 @@ router.post(
   "/uploadItemImages",
   validateHeaders(itemImageValidator),
   validateSeller,
-  validateItem,
+  validateItemWithSeller,
   uploadItemImage.array("itemImage"),
   validateMultipleImages,
   handleError(uploadItemImages)
 );
+
+/**Cart APIs */
+router.post('/addToCart', validateHeaders(itemImageValidator), validateCustomer, validateItem, handleError(addToCart));
+router.delete('/deleteFromCart', validateHeaders(itemImageValidator), validateCustomer, validateItem, handleError(deleteFromCart));
+router.put('/updateCartItem', validateBody(quantityValidator), validateHeaders(itemImageValidator), validateCustomer, validateItem, handleError(updateCartItem));
+router.get('/getCartItems', validateHeaders(itemImageValidator), validateCustomer, validateItem, handleError(updateCartItem));
