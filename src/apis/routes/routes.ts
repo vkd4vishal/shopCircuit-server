@@ -181,6 +181,7 @@ router.put(
   validateBody(changePasswordValidator),
   handleError(changePassword)
 );
+/*************************************** Ratings and Reviews ***************************************/
 router.get("/getRatingAndReviews", handleError(getRatingAndReviews));
 
 router.post(
@@ -189,12 +190,6 @@ router.post(
   validateBody(ratingAndReviewBodyValidator),
   handleError(saveRatingAndReviews)
 );
-// router.put(
-//   "/updateRatingAndReviews",
-//   validateHeaders(ratingAndReviewHeaderValidator),
-//   validateBody(ratingAndReviewBodyValidator),
-//   handleError(updateRatingAndReviews)
-// );
 router.delete(
   "/deleteRatingAndReviews",
   validateHeaders(ratingAndReviewHeaderValidator),
