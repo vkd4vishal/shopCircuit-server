@@ -14,31 +14,39 @@ import {
 import {
   addCategory,
   addItemDetails,
+  changePassword,
   deleteItem,
+  deleteRatingAndReviews,
   deleteUser,
+  forgotPassword,
   getCategories,
   getItemDetails,
   getItems,
   getProfile,
+  getRatingAndReviews,
   login,
+  saveRatingAndReviews,
+  sendOtpToMail,
   signUp,
   updateItemDetails,
   updateUserImage,
   updateUserProfile,
   uploadItemImages,
-  sendOtpToMail,
   validateEmailOtp,
-  forgotPassword,
-  changePassword
 } from "../controllers";
 import { addToCart, deleteFromCart, updateCartItem } from "../controllers/cart";
 import {
   addItemHeaderValidator,
   categoryValidator,
+  changePasswordValidator,
   deleteItemHeaderValidator,
+  forgotPasswordValidator,
   itemDetailsValidator,
   itemImageValidator,
   quantityValidator,
+  ratingAndReviewBodyValidator,
+  ratingAndReviewHeaderValidator,
+  sendOtpToMailValidator,
   updateItemDetailsValidator,
   updateItemHeaderValidator,
   updateUserProfileValidator,
@@ -47,10 +55,7 @@ import {
   userImageReqValidator,
   userLoginValidator,
   userProfileValidator,
-  changePasswordValidator,
   validateEmailOtpValidator,
-  sendOtpToMailValidator,
-  forgotPasswordValidator
 } from "../validators";
 
 export const router = express.Router();
@@ -161,7 +166,8 @@ router.post(
   validateBody(sendOtpToMailValidator),
   handleError(sendOtpToMail)
 );
-router.post("/validateEmailOtp",
+router.post(
+  "/validateEmailOtp",
   validateBody(validateEmailOtpValidator),
   handleError(validateEmailOtp)
 );
@@ -174,4 +180,23 @@ router.put(
   "/changePassword",
   validateBody(changePasswordValidator),
   handleError(changePassword)
+);
+router.get("/getRatingAndReviews", handleError(getRatingAndReviews));
+
+router.post(
+  "/saveRatingAndReviews",
+  validateHeaders(ratingAndReviewHeaderValidator),
+  validateBody(ratingAndReviewBodyValidator),
+  handleError(saveRatingAndReviews)
+);
+// router.put(
+//   "/updateRatingAndReviews",
+//   validateHeaders(ratingAndReviewHeaderValidator),
+//   validateBody(ratingAndReviewBodyValidator),
+//   handleError(updateRatingAndReviews)
+// );
+router.delete(
+  "/deleteRatingAndReviews",
+  validateHeaders(ratingAndReviewHeaderValidator),
+  handleError(deleteRatingAndReviews)
 );
