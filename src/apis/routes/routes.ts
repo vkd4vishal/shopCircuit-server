@@ -107,13 +107,6 @@ router.delete(
 );
 router.get("/getItems", handleError(getItems));
 router.get("/getItemDetails", handleError(getItemDetails));
-/********************************************** Categories ***************************************/
-router.post(
-  "/addCategory",
-  validateBody(categoryValidator),
-  handleError(addCategory)
-);
-router.get("/getCategories", handleError(getCategories));
 router.post(
   "/uploadItemImages",
   validateHeaders(itemImageValidator),
@@ -124,7 +117,15 @@ router.post(
   handleError(uploadItemImages)
 );
 
-/**Cart APIs */
+/********************************************** Categories ***************************************/
+router.post(
+  "/addCategory",
+  validateBody(categoryValidator),
+  handleError(addCategory)
+);
+router.get("/getCategories", handleError(getCategories));
+
+/************************************************ Cart Management ***********************************************/
 router.post(
   "/addToCart",
   validateHeaders(itemImageValidator),
