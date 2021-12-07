@@ -1,5 +1,6 @@
 import { Document, model, Schema } from "mongoose";
 
+//@TODO: contact number and city needed to be added & latitue and langitude for seller
 export interface userSchemaType extends Document {
     userName: string,
     email: string,
