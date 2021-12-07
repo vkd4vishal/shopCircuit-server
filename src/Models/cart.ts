@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 export interface cartSchemaType extends Document {
     userId: Types.ObjectId;
     products: [{
-        itemId: Types.ObjectId,
+        _id: Types.ObjectId,
         quantity: Number
     }],
 }
@@ -16,7 +16,7 @@ const CartSchema = new Schema<cartSchemaType>(
         },
         products: [
             {
-                itemId: mongoose.Schema.Types.ObjectId,
+                _id: mongoose.Schema.Types.ObjectId,
                 quantity: Number
             }
         ]
