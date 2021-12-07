@@ -7,11 +7,10 @@ import { CREATE, DELETE, GET, sendError, UPDATE } from "../../utils";
 export const validateItemWithCategory = async (
   itemId: string,
   categoryId: string,
-  res: any
 ) => {
   const [item, category] = await Promise.all([
-    validateItem(itemId, res),
-    validateCategory(categoryId, res),
+    validateItem(itemId),
+    validateCategory(categoryId),
   ]);
 
   const record = await itemModel.findOne({
@@ -28,10 +27,9 @@ export const validateItemWithCategory = async (
 export const validateItemWithSeller = async (
   itemId: string,
   sellerId: string,
-  res: any
 ) => {
-  const item = await validateItem(itemId, res);
-  const seller = await validateSeller(sellerId, res);
+  const item = await validateItem(itemId);
+  const seller = await validateSeller(sellerId);
 
   const record = await itemModel.findOne({
     sellerId: new mongoose.Types.ObjectId(sellerId?.toString()),
@@ -45,7 +43,7 @@ export const validateItemWithSeller = async (
   }
   return { record, item, seller };
 };
-export const validateItem = async (itemId: string, res: Response) => {
+export const validateItem = async (itemId: string) => {
   const record = await itemModel.findOne({
     _id: new mongoose.Types.ObjectId(itemId?.toString()),
   });
@@ -54,7 +52,7 @@ export const validateItem = async (itemId: string, res: Response) => {
   }
   return record;
 };
-export const validateCategory = async (categoryId: string, res: Response) => {
+export const validateCategory = async (categoryId: string) => {
   const record = await categoryModel.findOne({
     _id: new mongoose.Types.ObjectId(categoryId?.toString()),
   });
@@ -63,7 +61,7 @@ export const validateCategory = async (categoryId: string, res: Response) => {
   }
   return record;
 };
-export const validateSeller = async (sellerId: string, res: Response) => {
+export const validateSeller = async (sellerId: string) => {
   const record = await userModel.findOne({
     _id: new mongoose.Types.ObjectId(sellerId?.toString()),
     isSeller: true,
@@ -85,8 +83,8 @@ export const updateItemDetails: RequestHandler = async (
   }: { itemid: string; categoryid: string; userid: string } = headers;
   const sellerid = userid;
   await Promise.all([
-    validateItemWithCategory(itemid, categoryid, res),
-    validateItemWithSeller(itemid, sellerid, res),
+    validateItemWithCategory(itemid, categoryid),
+    validateItemWithSeller(itemid, sellerid),
   ]);
   const result = await itemModel.findOneAndUpdate(
     { _id: new mongoose.Types.ObjectId(itemid?.toString()) },
@@ -102,7 +100,7 @@ export const deleteItem: RequestHandler = async (
   const headers: any = req.headers;
   const { itemid, userid }: { itemid: string; userid: string } = headers;
   const sellerid = userid;
-  await validateItemWithSeller(itemid, sellerid, res);
+  await validateItemWithSeller(itemid, sellerid);
   itemImageGfs
     .find({ filename: itemid?.toString() + ".png" })
     .toArray((err: any, files: any) => {

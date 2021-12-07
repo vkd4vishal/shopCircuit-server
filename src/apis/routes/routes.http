@@ -1,9 +1,10 @@
 @host = localhost:1234
-@userid= 61adcc4f842e5b0f414463a8
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhZGNjNGY4NDJlNWIwZjQxNDQ2M2E4In0sImlhdCI6MTYzODc3OTk5OSwiZXhwIjoxNjM4ODE1OTk5fQ.p1eK366IqK5tnxkPT7smBdPJxIWYfgHSN9t3JM7Y4vM
+@userid= 61ab012977bda86351ad32db
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhYjAxMjk3N2JkYTg2MzUxYWQzMmRiIn0sImlhdCI6MTYzODc3MDAyNSwiZXhwIjoxNjM4ODA2MDI1fQ.qZWEWG0-yEK_ne082rRcf5aQ-1xWS_j3NLGsRHy4Dns
 @categoryId=61a1beaee4f4363c63ed4591
 @itemId=61ab02da9297bc948a92a37e
 @sellerId=61ab015577bda86351ad32e2
+@reviewId=61ada666166f39cb74522c95
 ### User SignUp 
 
 POST  /signup HTTP/1.1
@@ -11,12 +12,12 @@ Host:{{host}}
 Content-Type: application/json
 
 {
-    "userName": "shopkeepers",
+    "userName": "cas Seller",
     "firstName": "peter",
     "lastName": "parker",
     "password": "S@ngharsh123",
     "confirmPassword": "S@ngharsh123",
-    "email": "test12454@mail.com",
+    "email": "teas12454@mail.com",
     "aadharNumber": 123456799012,
     "address": "hell",
     "isSeller": true
@@ -64,7 +65,7 @@ categoryId:{{categoryId}}
 token:{{token}}
 
 {
-    "itemName": "fan",
+    "itemName": "fansss",
     "price": 1000,
     "weight": 1000,
     "brand": "Tin fans"
@@ -134,3 +135,73 @@ token:{{token}}
 {
     "quantity": 10
 }
+### GET getRatingAndReviews
+GET  /getRatingAndReviews?isSeller=false HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+
+### ADD reviewAnd Rating for Item
+POST  /saveRatingAndReviews HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+userId:{{userid}}
+token:{{token}}
+itemId:{{itemId}}
+
+{
+    "review": "Not good",
+    "rating":1
+}
+### ADD reviewAnd Rating for seller
+POST  /saveRatingAndReviews?isSeller=true HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+userId:{{userid}}
+token:{{token}}
+sellerId:{{sellerId}}
+
+{
+    "review": "Bad Seller",
+    "rating":1
+}
+
+### UPDATE reviewAnd Rating for Item
+POST  /saveRatingAndReviews HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+userId:{{userid}}
+token:{{token}}
+itemId:{{itemId}}
+
+{
+    "rating":1
+}
+### UPDATE reviewAnd Rating for seller
+POST  /saveRatingAndReviews?isSeller=true HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+userId:{{userid}}
+token:{{token}}
+sellerId:{{sellerId}}
+
+{
+    "review": "update very Good Seller",
+    "rating":3
+}
+
+### DELETE rating and Review
+DELETE  /deleteRatingAndReviews?isSeller=false HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+userId:{{userid}}
+token:{{token}}
+itemId:{{itemId}}
+
+
+### DELETE rating and Review
+DELETE  /deleteRatingAndReviews HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+userId:{{userid}}
+token:{{token}}
+reviewId:{{reviewId}}
