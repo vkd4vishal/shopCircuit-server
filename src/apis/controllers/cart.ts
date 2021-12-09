@@ -1,7 +1,9 @@
 import { Request, RequestHandler, Response } from "express";
 import mongoose from "mongoose";
+import { itemImageGfs } from "../..";
+import { itemModel } from "../../Models";
 import { cartModel } from "../../Models/cart";
-import { CREATE, DELETE, sendError, UPDATE } from "../../utils/utils";
+import { CREATE, DELETE, GET, sendError, UPDATE } from "../../utils/utils";
 
 export const addToCart: RequestHandler = async (
   req: Request,
@@ -69,3 +71,46 @@ export const updateCartItem: RequestHandler = async (
 
   return UPDATE(res, cart, "Item");
 };
+
+
+export const getCartItems: RequestHandler = async (req: Request, res: Response) => {
+
+  const userId = req.headers.userid;
+
+  const result = await cartModel.findOne({ userId: userId })
+
+  if (!result) return sendError(404, 'Empty cart');
+
+  const itemIds = result.products;
+  const ids: any = [];
+  itemIds.forEach((item) => {
+    ids.push(item._id.toString())
+  })
+
+  const getCartResults = async (id: any) => {
+    const itemDetails = await itemModel.findOne({
+      _id: new mongoose.Types.ObjectId(id)
+    })
+    function getImages() {
+      return new Promise(function (resolve, reject) {
+        itemImageGfs
+          .find({ filename: id?.toString() + ".png" })
+          .toArray(function (err: any, files: any) {
+            if (err) {
+              return reject(err);
+            }
+            return resolve(files);
+          });
+      });
+    }
+    const itemImages: any = await getImages();
+
+    return { 'itemDetail': itemDetails, 'image': itemImages }
+  }
+
+  const cartsData = ids.map(async (id: string) => {
+    return await getCartResults(id)
+  })
+  const cartResult = await Promise.all(cartsData)
+  return GET(res, { cartResult }, "Cart Items")
+}

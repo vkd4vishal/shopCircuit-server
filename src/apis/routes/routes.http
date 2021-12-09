@@ -208,3 +208,13 @@ Content-Type: application/json
 userId:{{userid}}
 token:{{token}}
 reviewId:{{reviewId}}
+
+
+### 
+
+GET  /getCartItems HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+userId:{{userid}}
+itemId:{{itemId}}
+token:{{token}}

@@ -35,7 +35,7 @@ import {
   validateEmailOtp,
 
 } from "../controllers";
-import { addToCart, deleteFromCart, updateCartItem } from "../controllers/cart";
+import { addToCart, deleteFromCart, getCartItems, updateCartItem } from "../controllers/cart";
 import {
   addItemHeaderValidator,
   categoryValidator,
@@ -161,7 +161,7 @@ router.get(
   validateHeaders(itemImageValidator),
   validateCustomer,
   validateItem,
-  handleError(updateCartItem)
+  handleError(getCartItems)
 );
 /*************************************** Forgot Password ***************************************/
 router.post(
