@@ -15,7 +15,7 @@ import {
   addCategory,
   addItemDetails,
   changePassword,
-  deleteItem,
+  deleteItems,
   deleteRatingAndReviews,
   deleteUser,
   forgotPassword,
@@ -33,13 +33,14 @@ import {
   updateUserProfile,
   uploadItemImages,
   validateEmailOtp,
+
 } from "../controllers";
 import { addToCart, deleteFromCart, updateCartItem } from "../controllers/cart";
 import {
   addItemHeaderValidator,
   categoryValidator,
   changePasswordValidator,
-  deleteItemHeaderValidator,
+  deleteItemsHeaderValidator,
   forgotPasswordValidator,
   itemDetailsValidator,
   itemImageValidator,
@@ -56,6 +57,7 @@ import {
   userLoginValidator,
   userProfileValidator,
   validateEmailOtpValidator,
+  deleteItemsBodyValidator
 } from "../validators";
 
 export const router = express.Router();
@@ -105,10 +107,11 @@ router.put(
   validateBody(updateItemDetailsValidator),
   handleError(updateItemDetails)
 );
-router.delete(
-  "/deleteItem",
-  validateHeaders(deleteItemHeaderValidator),
-  handleError(deleteItem)
+router.post(
+  "/deleteItems",
+  validateHeaders(deleteItemsHeaderValidator),
+  validateBody(deleteItemsBodyValidator),
+  handleError(deleteItems)
 );
 router.get("/getItems", handleError(getItems));
 router.get("/getItemDetails", handleError(getItemDetails));

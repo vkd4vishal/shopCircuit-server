@@ -1,6 +1,6 @@
 import { Request, RequestHandler, Response } from "express";
 import mongoose from "mongoose";
-import { validateItem, validateSeller } from ".";
+import { validateItems, validateSeller } from ".";
 import { userModel } from "../../Models/index";
 import {
   ItemRatingAndReviewsModel,
@@ -53,7 +53,7 @@ export const getRatingAndReviews: RequestHandler = async (
     | ratingAndReviewsModel<ratingAndReviewsType>
     | ratingAndReviewsModel<SellerRatingAndReviewsType> = ItemRatingAndReviewsModel;
 
-  let validate: any[] = req.query.itemId ? [validateItem(itemId)] : [];
+  let validate: any[] = req.query.itemId ? [validateItems([itemId])] : [];
   await Promise.all(validate);
   if (req.query.isSeller === "true") {
     model = sellerRatingAndReviewModel;
@@ -85,7 +85,7 @@ export const saveRatingAndReviews: RequestHandler = async (
   if (req.query.isSeller === "true") {
     validate.push(validateSeller(sellerId));
   } else {
-    validate.push(validateItem(itemId));
+    validate.push(validateItems([itemId]));
   }
   await Promise.all(validate);
   let model: any = ItemRatingAndReviewsModel;

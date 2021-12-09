@@ -1,9 +1,9 @@
 @host = localhost:1234
-@userid= 61adcc4f842e5b0f414463a8
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFhZGNjNGY4NDJlNWIwZjQxNDQ2M2E4In0sImlhdCI6MTYzODg2MDU2MywiZXhwIjoxNjM4ODk2NTYzfQ.FAhZkVNwy5kyDr-5TlWsUyPDK40Ul2w_3l6JbheOWZc
+@userid= 61b064ae6822a02a735fe011
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFiMDY0YWU2ODIyYTAyYTczNWZlMDExIn0sImlhdCI6MTYzOTA0ODE2NywiZXhwIjoxNjM5MDg0MTY3fQ.fRN2gmlb5u3FFmyqrT92D7BNGTHR_0sICbakaopTPao
 @categoryId=61a1beaee4f4363c63ed4591
 @itemId=61ab02da9297bc948a92a37e
-@sellerId=61ab015577bda86351ad32e2
+@sellerId=61b064ae6822a02a735fe011
 @reviewId=61ada666166f39cb74522c95
 ### User SignUp 
 
@@ -29,7 +29,7 @@ Host:{{host}}
 Content-Type: application/json
 
 {
-    "userName":"vkd0066",
+    "userName":"vkd9977",
     "password":"Vish@l123"
 }
 
@@ -83,7 +83,7 @@ itemId:{{itemId}}
     "brand": "Tin Electrical"
 }
 ### GET getItems
-GET  /getItems?search=Sankar HTTP/1.1
+GET  /getItems?sellerId=61b064ae6822a02a735fe011 HTTP/1.1
 Host:{{host}}
 Content-Type: application/json
 
@@ -94,12 +94,15 @@ Host:{{host}}
 Content-Type: application/json
 
 ### DELETE ItemDetails
-DELETE  /deleteItemDetails HTTP/1.1
+POST  /deleteItems HTTP/1.1
 Host:{{host}}
 Content-Type: application/json
 userId:{{userid}}
 token:{{token}}
-itemId:{{itemId}}
+
+{
+ "items":["61b1f20deeebd65d88cd5de1","61b065266822a02a735fe017"]
+}
 
 ### POST addToCart
 

@@ -4,53 +4,56 @@ import { itemImageGfs } from "../../index";
 import { categoryModel, itemModel, userModel } from "../../Models/index";
 import { CREATE, DELETE, GET, sendError, UPDATE } from "../../utils";
 
-export const validateItemWithCategory = async (
-  itemId: string,
-  categoryId: string,
+export const validateItemsWithCategory = async (
+  items: string[],
+  categoryId: string
 ) => {
-  const [item, category] = await Promise.all([
-    validateItem(itemId),
+  const [itemsRecord, category] = await Promise.all([
+    validateItems(items),
     validateCategory(categoryId),
   ]);
-
-  const record = await itemModel.findOne({
-    category: new mongoose.Types.ObjectId(categoryId?.toString()),
-    _id: new mongoose.Types.ObjectId(itemId?.toString()),
+  itemsRecord.forEach((item) => {
+    if (item.category.toString() !== categoryId) {
+      return sendError(
+        500,
+        `The item ${item.itemName} selected doesn't belong to the category ${category?.categoryName}`
+      );
+    }
   });
-  if (!record) {
-    return sendError(
-      500,
-      `The item ${item?.itemName} selected doesn't belong to the category ${category?.categoryName}`
-    );
-  }
 };
-export const validateItemWithSeller = async (
-  itemId: string,
-  sellerId: string,
+export const validateItemsWithSeller = async (
+  items: string[],
+  sellerId: string
 ) => {
-  const item = await validateItem(itemId);
+  const itemsRecord = await validateItems(items);
   const seller = await validateSeller(sellerId);
-
-  const record = await itemModel.findOne({
-    sellerId: new mongoose.Types.ObjectId(sellerId?.toString()),
-    _id: new mongoose.Types.ObjectId(itemId?.toString()),
+  itemsRecord.forEach((item) => {
+    // const record = await itemModel.findOne({
+    //   sellerId: new mongoose.Types.ObjectId(sellerId?.toString()),
+    //   _id: new mongoose.Types.ObjectId(itemId?.toString()),
+    // });
+    if (item.sellerId.toString() !== sellerId) {
+      return sendError(
+        500,
+        `The selected item ${item?.itemName}  doesn't belong to the seller ${seller?.userName}`
+      );
+    }
   });
-  if (!record) {
-    return sendError(
-      500,
-      `The selected item ${item?.itemName}  doesn't belong to the seller ${seller?.userName}`
-    );
-  }
-  return { record, item, seller };
+  return { itemsRecord, seller };
 };
-export const validateItem = async (itemId: string) => {
-  const record = await itemModel.findOne({
-    _id: new mongoose.Types.ObjectId(itemId?.toString()),
-  });
-  if (!record) {
-    return sendError(500, "The item selected doesn't exist");
+
+export const validateItems = async (items: string[]) => {
+
+  const records = await itemModel.find({ _id: { $in: items } });
+  console.log('records',records)
+  if (records.length !== items.length) {
+    items.forEach((item) => {
+      if (!records.find((record) => record._id.toString() === item)) {
+        return sendError(500, `Item with id ${item} doesn't exist`);
+      }
+    });
   }
-  return record;
+  return records;
 };
 export const validateCategory = async (categoryId: string) => {
   const record = await categoryModel.findOne({
@@ -83,8 +86,8 @@ export const updateItemDetails: RequestHandler = async (
   }: { itemid: string; categoryid: string; userid: string } = headers;
   const sellerid = userid;
   await Promise.all([
-    validateItemWithCategory(itemid, categoryid),
-    validateItemWithSeller(itemid, sellerid),
+    validateItemsWithCategory([itemid], categoryid),
+    validateItemsWithSeller([itemid], sellerid),
   ]);
   const result = await itemModel.findOneAndUpdate(
     { _id: new mongoose.Types.ObjectId(itemid?.toString()) },
@@ -93,24 +96,30 @@ export const updateItemDetails: RequestHandler = async (
 
   return UPDATE(res, { result }, "Item");
 };
-export const deleteItem: RequestHandler = async (
+export const deleteItems: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
-  const headers: any = req.headers;
-  const { itemid, userid }: { itemid: string; userid: string } = headers;
-  const sellerid = userid;
-  await validateItemWithSeller(itemid, sellerid);
-  itemImageGfs
-    .find({ filename: itemid?.toString() + ".png" })
-    .toArray((err: any, files: any) => {
-      files.forEach((file: any) => {
-        itemImageGfs.delete(file._id);
+  const sellerid:any= req.headers.userid;
+  const { items } = req.body;
+  await validateItemsWithSeller(items, sellerid);
+  items.forEach((itemId:string) => {
+    itemImageGfs
+      .find({ filename: itemId?.toString() + ".png" })
+      .toArray((err: any, files: any) => {
+        files.forEach((file: any) => {
+          itemImageGfs.delete(file._id);
+        });
       });
-    });
-  const result = await itemModel.deleteOne({
-    _id: new mongoose.Types.ObjectId(itemid?.toString()),
   });
+  const result = await Promise.all(
+    items.map(
+      async(itemId:string) =>
+        await itemModel.deleteOne({
+          _id: new mongoose.Types.ObjectId(itemId?.toString()),
+        })
+    )
+  );
 
   return DELETE(res, result, "Item");
 };
@@ -124,7 +133,7 @@ export const addItemDetails: RequestHandler = async (
   if (!record) {
     return sendError(406, "You are not a seller");
   }
-  
+
   let newItem = new itemModel({
     ...req.body,
     sellerId,
@@ -166,12 +175,15 @@ export const getItems: RequestHandler = async (req: Request, res: Response) => {
   return GET(res, { data }, "Items");
 };
 
-export const getItemDetails: RequestHandler = async (req: Request, res: Response) => {
-  const itemId = req.headers.itemid
+export const getItemDetails: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const itemId = req.headers.itemid;
 
   const itemDetails = await itemModel.findOne({
-    _id: new mongoose.Types.ObjectId(itemId?.toString())
-  })
+    _id: new mongoose.Types.ObjectId(itemId?.toString()),
+  });
 
   function getImages() {
     return new Promise(function (resolve, reject) {
@@ -187,4 +199,4 @@ export const getItemDetails: RequestHandler = async (req: Request, res: Response
   }
   const itemImages: any = await getImages();
   return GET(res, { itemDetails, itemImages }, "Items and its Images");
-}
+};
