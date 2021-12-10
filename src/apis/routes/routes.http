@@ -1,6 +1,6 @@
 @host = localhost:1234
 @userid= 61b064ae6822a02a735fe011
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFiMDY0YWU2ODIyYTAyYTczNWZlMDExIn0sImlhdCI6MTYzOTA0ODE2NywiZXhwIjoxNjM5MDg0MTY3fQ.fRN2gmlb5u3FFmyqrT92D7BNGTHR_0sICbakaopTPao
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFiMDY0YWU2ODIyYTAyYTczNWZlMDExIn0sImlhdCI6MTYzOTEyMDM4MCwiZXhwIjoxNjM5MTU2MzgwfQ.2H_JXDd29Ymm7NU_hasiGDppZCYotUP8TyAW1eA0LgE
 @categoryId=61a1beaee4f4363c63ed4591
 @itemId=61ab02da9297bc948a92a37e
 @sellerId=61b064ae6822a02a735fe011
@@ -65,7 +65,7 @@ categoryId:{{categoryId}}
 token:{{token}}
 
 {
-    "itemName": "fansss",
+    "itemName": "Pants",
     "price": 1000,
     "weight": 1000,
     "brand": "Tin fans"

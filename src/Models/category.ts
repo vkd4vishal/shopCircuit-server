@@ -11,8 +11,7 @@ var categorySchema = new Schema<categorySchemaType>({
         minLength: 1,
         maxLength: 50,
         required: [true, 'You must enter categoryName.'],
-    },
-
+    }
 });
 categorySchema.plugin(mongoosePaginate)
 

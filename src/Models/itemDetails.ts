@@ -25,7 +25,7 @@ let itemSchema = new Schema<itemDetailSchemaType>({
     },
     category: {
         type: Schema.Types.ObjectId,
-        required: [true, 'Category required.'],
+        required: [true, 'Category required.']
     },
     weight: {
         type: Number,

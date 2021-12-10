@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from "express";
 import mongoose from "mongoose";
 import { itemImageGfs } from "../../index";
-import { categoryModel, itemModel, userModel } from "../../Models/index";
+import { categoryModel, itemModel, userModel,itemDetailSchemaType } from "../../Models/index";
 import { CREATE, DELETE, GET, sendError, UPDATE } from "../../utils";
 
 export const validateItemsWithCategory = async (
@@ -43,9 +43,8 @@ export const validateItemsWithSeller = async (
 };
 
 export const validateItems = async (items: string[]) => {
-
   const records = await itemModel.find({ _id: { $in: items } });
-  console.log('records',records)
+  console.log("records", records);
   if (records.length !== items.length) {
     items.forEach((item) => {
       if (!records.find((record) => record._id.toString() === item)) {
@@ -100,10 +99,10 @@ export const deleteItems: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
-  const sellerid:any= req.headers.userid;
+  const sellerid: any = req.headers.userid;
   const { items } = req.body;
   await validateItemsWithSeller(items, sellerid);
-  items.forEach((itemId:string) => {
+  items.forEach((itemId: string) => {
     itemImageGfs
       .find({ filename: itemId?.toString() + ".png" })
       .toArray((err: any, files: any) => {
@@ -114,7 +113,7 @@ export const deleteItems: RequestHandler = async (
   });
   const result = await Promise.all(
     items.map(
-      async(itemId:string) =>
+      async (itemId: string) =>
         await itemModel.deleteOne({
           _id: new mongoose.Types.ObjectId(itemId?.toString()),
         })
@@ -163,7 +162,7 @@ export const getItems: RequestHandler = async (req: Request, res: Response) => {
   if (search) {
     where = { ...where, $text: { $search: `${search}` } };
   }
-  const data = await itemModel.paginate(
+  const items = await itemModel.paginate(
     { ...where, ...filters },
     {
       sort: { [sort]: order },
@@ -171,7 +170,16 @@ export const getItems: RequestHandler = async (req: Request, res: Response) => {
       offset: limit * (page - 1),
       page: page,
     }
-  );
+  ) as unknown as itemDetailSchemaType[]
+  let data;
+  if (items) {
+    data=items?.map(async (item:itemDetailSchemaType) => {
+      const category = await categoryModel.findOne({
+        _id: item.category,
+      });
+      return { ...item, categoryName: category?.categoryName };
+    });
+  }
   return GET(res, { data }, "Items");
 };
 
