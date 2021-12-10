@@ -1,7 +1,13 @@
 import { Request, RequestHandler, Response } from "express";
 import mongoose from "mongoose";
 import { itemImageGfs } from "../../index";
-import { categoryModel, itemModel, userModel,itemDetailSchemaType } from "../../Models/index";
+import {
+  categoryModel,
+  itemModel,
+  userModel,
+  itemDetailSchemaType,
+  categorySchemaType,
+} from "../../Models/index";
 import { CREATE, DELETE, GET, sendError, UPDATE } from "../../utils";
 
 export const validateItemsWithCategory = async (
@@ -169,17 +175,21 @@ export const getItems: RequestHandler = async (req: Request, res: Response) => {
       limit: limit,
       offset: limit * (page - 1),
       page: page,
+      lean: true,
     }
-  ) as unknown as itemDetailSchemaType[]
-  let data;
-  if (items) {
-    data=items?.map(async (item:itemDetailSchemaType) => {
-      const category = await categoryModel.findOne({
-        _id: item.category,
-      });
-      return { ...item, categoryName: category?.categoryName };
-    });
-  }
+  );
+  const categoryIds = items.docs.map(
+    (item: itemDetailSchemaType) => item.category
+  );
+  const categories = await categoryModel.find({ _id: { $in: categoryIds } });
+  const data = items.docs.map((item: itemDetailSchemaType) => {
+    const category = categories.find(
+      (record: categorySchemaType) =>
+        record._id.toString() === item.category.toString()
+    );
+    return { ...item, categoryName: category?.categoryName };
+  });
+
   return GET(res, { data }, "Items");
 };
 
