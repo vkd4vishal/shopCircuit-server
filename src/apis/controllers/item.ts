@@ -126,7 +126,7 @@ export const deleteItems: RequestHandler = async (
     )
   );
 
-  return DELETE(res, result, "Item");
+  return DELETE(res, result, "Items");
 };
 
 export const addItemDetails: RequestHandler = async (
@@ -178,6 +178,7 @@ export const getItems: RequestHandler = async (req: Request, res: Response) => {
       lean: true,
     }
   );
+  
   const categoryIds = items.docs.map(
     (item: itemDetailSchemaType) => item.category
   );
@@ -190,7 +191,7 @@ export const getItems: RequestHandler = async (req: Request, res: Response) => {
     return { ...item, categoryName: category?.categoryName };
   });
 
-  return GET(res, { data }, "Items");
+  return GET(res, { data,totalDocs:items.totalDocs }, "Items");
 };
 
 export const getItemDetails: RequestHandler = async (
