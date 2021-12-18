@@ -37,6 +37,7 @@ export const getCategories: RequestHandler = async (
       limit: limit,
       offset: limit * (page - 1),
       page: page,
+      lean:true
     }
   );
 

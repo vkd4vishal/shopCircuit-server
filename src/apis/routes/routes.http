@@ -83,7 +83,7 @@ itemId:{{itemId}}
     "brand": "Tin Electrical"
 }
 ### GET getItems
-GET  /getItems?sellerId=61b064ae6822a02a735fe011&limit=5&page=1&category=619de5354f3af7f164ff2d24 HTTP/1.1
+GET  /getItems?sellerId=61b064ae6822a02a735fe011&limit=5&page=1&search= HTTP/1.1
 Host:{{host}}
 Content-Type: application/json
 
