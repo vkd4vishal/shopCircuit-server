@@ -166,10 +166,13 @@ export const getItems: RequestHandler = async (req: Request, res: Response) => {
   } = req.query as unknown as getItemsQuery;
   let where = {};
   if (search) {
-    where = { ...where, $text: { $search: `${search}` } };
+    where =  { ...where, $or: [
+      {itemName: {$regex: search, $options: 'i'}},
+      {brand: {$regex: search, $options: 'i'}}
+    ]  };
   }
   const items = await itemModel.paginate(
-    { ...where, ...filters },
+     { ...where, $and:[{...filters}] },
     {
       sort: { [sort]: order },
       limit: limit,

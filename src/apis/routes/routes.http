@@ -1,6 +1,6 @@
 @host = localhost:1234
 @userid= 61b064ae6822a02a735fe011
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFiMDY0YWU2ODIyYTAyYTczNWZlMDExIn0sImlhdCI6MTYzOTE2MTg4MywiZXhwIjoxNjM5MTk3ODgzfQ.9j3HEsxEIz-YgY3v3wExRTMNdxwO3UwJLT3BnW6JW8Q
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFiMDY0YWU2ODIyYTAyYTczNWZlMDExIn0sImlhdCI6MTYzOTU3MTgxMiwiZXhwIjoxNjM5NjA3ODEyfQ.kezqPBiWzLwwKOL2VZCGRBPpWQTuxTNUjmpMbc1qILc
 @categoryId=61a1beaee4f4363c63ed4591
 @itemId=61ab02da9297bc948a92a37e
 @sellerId=61b064ae6822a02a735fe011
@@ -65,10 +65,10 @@ categoryId:619b573c99e24576066c1f3e
 token:{{token}}
 
 {
-    "itemName": "Iphone Poco",
+    "itemName": "Sankar XII",
     "price": 1000,
     "weight": 1000,
-    "brand": "Poco"
+    "brand": "Shanky"
 }
 ### update ItemDetails
 POST  /updateItemDetails HTTP/1.1
@@ -83,7 +83,7 @@ itemId:{{itemId}}
     "brand": "Tin Electrical"
 }
 ### GET getItems
-GET  /getItems?sellerId=61b064ae6822a02a735fe011&limit=2&page=4 HTTP/1.1
+GET  /getItems?sellerId=61b064ae6822a02a735fe011&limit=5&page=1&category=619de5354f3af7f164ff2d24 HTTP/1.1
 Host:{{host}}
 Content-Type: application/json
 
