@@ -28,7 +28,10 @@ let ratingAndReviewsSchema = new Schema<SellerRatingAndReviewsType>({
         required: false,
         min: 0
     },
-});
+},
+{
+    timestamps: true,
+  });
 ratingAndReviewsSchema.plugin(mongoosePaginate)
 // itemSchema.index({ brand : 'text',temName : 'text' })
 

@@ -47,7 +47,7 @@ export const getRatingAndReviews: RequestHandler = async (
   } = req.query as unknown as getItemsQuery;
   let where = {};
   if (search) {
-    where = { ...where, $text: { $search: `${search}` } };
+    where = { ...where, review: {$regex: search, $options: 'i'}}
   }
   let model:
     | ratingAndReviewsModel<ratingAndReviewsType>
@@ -58,31 +58,62 @@ export const getRatingAndReviews: RequestHandler = async (
   if (req.query.isSeller === "true") {
     model = sellerRatingAndReviewModel;
   }
-  const data = await model.paginate(
+  let data: any = await model.paginate(
     { ...where, ...filters },
     {
       sort: { [sort]: order },
       limit: limit,
       offset: limit * (page - 1),
       page: page,
+      lean: true,
     }
   );
-  return GET(res, { data }, "rating and Review");
+  let result = data?.docs.map(async (each: any) => {
+    const user = await userModel.findOne({ _id: each.userId });
+    // console.log(user)
+    if (!user) {
+      return sendError(404, "Email does not exist.");
+    }
+    // console.log({each,user})
+    return { ...each, user };
+  });
+  data = await Promise.all(result);
+  // console.log(data.toObject())
+  return GET(
+    res,
+    {
+      data: {
+        data,
+        totalDocs: data.totalDocs,
+        totalPages: data.totalPages,
+        page: data.page,
+        hasPrevPage: data.hasPrevPage,
+        hasNextPage: data.hasNextPage,
+        prevPage: data.prevPage,
+        nextPage: data.nextPage,
+      },
+    },
+    "rating and Review"
+  );
 };
+interface saveRatingAndReviewQuery {
+  isSeller: boolean;
+}
 export const saveRatingAndReviews: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
+  const { isSeller } = req.query as unknown as saveRatingAndReviewQuery;
   let where = {};
   const headers: any = req.headers;
-  const userId: string = headers.userid;
+  const userId: string = "headers.userid";
   const itemId: string = headers.itemid;
   const sellerId: string = headers.sellerid;
-  if(!itemId && !sellerId){
+  if (!itemId && !sellerId) {
     return sendError(500, "The itemId or seller Id is required");
   }
   let validate: any[] = [validateCustomer(userId)];
-  if (req.query.isSeller === "true") {
+  if (isSeller === true) {
     validate.push(validateSeller(sellerId));
   } else {
     validate.push(validateItems([itemId]));
@@ -90,7 +121,8 @@ export const saveRatingAndReviews: RequestHandler = async (
   await Promise.all(validate);
   let model: any = ItemRatingAndReviewsModel;
   where = { ...where, userId: new mongoose.Types.ObjectId(userId?.toString()) };
-  if (req.query.isSeller) {
+  console.log(isSeller);
+  if (isSeller === true) {
     model = sellerRatingAndReviewModel;
     where = {
       ...where,
@@ -129,7 +161,7 @@ export const deleteRatingAndReviews: RequestHandler = async (
     _id: new mongoose.Types.ObjectId(reviewId?.toString()),
   };
   const record = await model.findOne({ ...where });
-  if(!record){
+  if (!record) {
     return sendError(500, "The review selected doesn't belong to the user");
   }
   const result = await model.deleteOne({

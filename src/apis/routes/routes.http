@@ -1,10 +1,11 @@
 @host = localhost:1234
 @userid= 61b064ae6822a02a735fe011
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFiMDY0YWU2ODIyYTAyYTczNWZlMDExIn0sImlhdCI6MTYzOTU3MTgxMiwiZXhwIjoxNjM5NjA3ODEyfQ.kezqPBiWzLwwKOL2VZCGRBPpWQTuxTNUjmpMbc1qILc
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFiMDY0YWU2ODIyYTAyYTczNWZlMDExIn0sImlhdCI6MTYzOTE2MTg4MywiZXhwIjoxNjk5MTk3ODgzfQ.BWbWacbilhd7vMRoX0I8INe74LKnZJMViMAH9-n8jwU
 @categoryId=61a1beaee4f4363c63ed4591
 @itemId=61ab02da9297bc948a92a37e
 @sellerId=61b064ae6822a02a735fe011
 @reviewId=61ada666166f39cb74522c95
+
 ### User SignUp 
 
 POST  /signup HTTP/1.1
@@ -12,15 +13,15 @@ Host:{{host}}
 Content-Type: application/json
 
 {
-    "userName": "cas Seller",
+    "userName": "vkd12341",
     "firstName": "peter",
     "lastName": "parker",
     "password": "S@ngharsh123",
     "confirmPassword": "S@ngharsh123",
-    "email": "teas12454@mail.com",
+    "email": "te2er@mail.com",
     "aadharNumber": 123456799012,
     "address": "hell",
-    "isSeller": true
+    "isSeller": false
 }
 
 ### login API
@@ -29,8 +30,8 @@ Host:{{host}}
 Content-Type: application/json
 
 {
-    "userName":"vkd9977",
-    "password":"Vish@l123"
+    "userName":"vkd12341",
+    "password":"S@ngharsh123"
 }
 
 ### GET User Profiles
@@ -139,7 +140,7 @@ token:{{token}}
     "quantity": 10
 }
 ### GET getRatingAndReviews
-GET  /getRatingAndReviews?isSeller=false HTTP/1.1
+GET  /getRatingAndReviews?isSeller=false&itemId=61a1da9bcd436d7b3860aac9 HTTP/1.1
 Host:{{host}}
 Content-Type: application/json
 
@@ -152,20 +153,20 @@ token:{{token}}
 itemId:{{itemId}}
 
 {
-    "review": "Not good",
-    "rating":1
+    "review": "good one",
+    "rating":3
 }
 ### ADD reviewAnd Rating for seller
-POST  /saveRatingAndReviews?isSeller=true HTTP/1.1
+POST  /saveRatingAndReviews?isSeller=false HTTP/1.1
 Host:{{host}}
 Content-Type: application/json
 userId:{{userid}}
 token:{{token}}
-sellerId:{{sellerId}}
+itemId:{{itemId}}
 
 {
-    "review": "Bad Seller",
-    "rating":1
+    "review": "Good Product",
+    "rating":4
 }
 
 ### UPDATE reviewAnd Rating for Item
@@ -188,8 +189,8 @@ token:{{token}}
 sellerId:{{sellerId}}
 
 {
-    "review": "update very Good Seller",
-    "rating":3
+    "review": "average Product",
+    "rating":2
 }
 
 ### DELETE rating and Review
