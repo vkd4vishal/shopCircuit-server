@@ -77,7 +77,7 @@ export const saveRatingAndReviews: RequestHandler = async (
   const headers: any = req.headers;
   const userId: string = headers.userid;
   const itemId: string = headers.itemid;
-  const sellerId: string = headers.sellerid;
+  const sellerId: string = headers.userid;
   if(!itemId && !sellerId){
     return sendError(500, "The itemId or seller Id is required");
   }
@@ -116,7 +116,6 @@ export const deleteRatingAndReviews: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
-  // @TODO: Need to use userId and Review ID for deletion
   const headers: any = req.headers;
   const userId: string = headers.userid;
   const reviewId: string = headers.reviewid;

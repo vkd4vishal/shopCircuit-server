@@ -33,13 +33,18 @@ import {
   updateUserProfile,
   uploadItemImages,
   validateEmailOtp,
-
 } from "../controllers";
-import { addToCart, deleteFromCart, getCartItems, updateCartItem } from "../controllers/cart";
+import {
+  addToCart,
+  deleteFromCart,
+  getCartItems,
+  updateCartItem,
+} from "../controllers/cart";
 import {
   addItemHeaderValidator,
   categoryValidator,
   changePasswordValidator,
+  deleteItemsBodyValidator,
   deleteItemsHeaderValidator,
   forgotPasswordValidator,
   itemDetailsValidator,
@@ -53,11 +58,9 @@ import {
   updateUserProfileValidator,
   uploadItemImage,
   uploadUserImage,
-  userImageReqValidator,
   userLoginValidator,
   userProfileValidator,
   validateEmailOtpValidator,
-  deleteItemsBodyValidator
 } from "../validators";
 
 export const router = express.Router();
@@ -66,7 +69,6 @@ export const router = express.Router();
 router.post("/signup", validateBody(userProfileValidator), handleError(signUp));
 router.post(
   "/updateUserImage",
-  validateHeaders(userImageReqValidator),
   validateUser,
   uploadUserImage.single("photo"),
   validateImage,
@@ -74,20 +76,17 @@ router.post(
 );
 router.get(
   "/getProfile",
-  validateHeaders(userImageReqValidator),
   validateUser,
   handleError(getProfile)
 );
 router.delete(
   "/deleteUser",
-  validateHeaders(userImageReqValidator),
   validateUser,
   handleError(deleteUser)
 );
 
 router.put(
   "/updateUserProfile",
-  validateHeaders(userImageReqValidator),
   validateBody(updateUserProfileValidator),
   validateUser,
   handleError(updateUserProfile)

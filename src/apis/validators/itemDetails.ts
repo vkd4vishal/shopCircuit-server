@@ -18,17 +18,13 @@ export const updateItemHeaderValidator = Joi.object({
   categoryid: Joi.string()
     .regex(/^[0-9a-fA-F]{24}$/)
     .required(),
-  userid: Joi.string()
-    .regex(/^[0-9a-fA-F]{24}$/)
-    .required(),
+ 
 });
 export const deleteItemsHeaderValidator = Joi.object({
 //   itemid: Joi.string()
 //     .regex(/^[0-9a-fA-F]{24}$/)
 //     .required(),
-  userid: Joi.string()
-    .regex(/^[0-9a-fA-F]{24}$/)
-    .required(),
+ 
   items: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/)),
 });
 export const deleteItemsBodyValidator = Joi.object({
@@ -43,8 +39,5 @@ export const deleteItemsBodyValidator = Joi.object({
 export const addItemHeaderValidator = Joi.object({
   categoryid: Joi.string()
     .regex(/^[0-9a-fA-F]{24}$/)
-    .required(),
-  userid: Joi.string()
-    .regex(/^[0-9a-fA-F]{24}$/)
-    .required(),
+    .required()
 });
