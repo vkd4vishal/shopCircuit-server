@@ -85,10 +85,21 @@ itemId:{{itemId}}
 }
 
 ### GET getItems
-GET  /getItems? HTTP/1.1
+GET  /getItems HTTP/1.1
 Host:{{host}}
 Content-Type: application/json
 
+### GET Item Details
+GET  /getItemDetails HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+itemid:61c95b1a0441b13aa042e6e7
+
+### GET Item Details
+GET  /getItemImage HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+itemimageid:61c95b340441b13aa042e6eb
 
 ### GET Categories
 GET  /getCategories HTTP/1.1

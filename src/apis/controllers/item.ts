@@ -166,13 +166,16 @@ export const getItems: RequestHandler = async (req: Request, res: Response) => {
   } = req.query as unknown as getItemsQuery;
   let where = {};
   if (search) {
-    where =  { ...where, $or: [
-      {itemName: {$regex: search, $options: 'i'}},
-      {brand: {$regex: search, $options: 'i'}}
-    ]  };
+    where = {
+      ...where,
+      $or: [
+        { itemName: { $regex: search, $options: "i" } },
+        { brand: { $regex: search, $options: "i" } },
+      ],
+    };
   }
   const items = await itemModel.paginate(
-     { ...where, $and:[{...filters}] },
+    { ...where, $and: [{ ...filters }] },
     {
       sort: { [sort]: order },
       limit: limit,
@@ -181,7 +184,7 @@ export const getItems: RequestHandler = async (req: Request, res: Response) => {
       lean: true,
     }
   );
-  
+
   const categoryIds = items.docs.map(
     (item: itemDetailSchemaType) => item.category
   );
@@ -194,7 +197,7 @@ export const getItems: RequestHandler = async (req: Request, res: Response) => {
     return { ...item, categoryName: category?.categoryName };
   });
 
-  return GET(res, { data,totalDocs:items.totalDocs }, "Items");
+  return GET(res, { data, totalDocs: items.totalDocs }, "Items");
 };
 
 export const getItemDetails: RequestHandler = async (
@@ -221,4 +224,30 @@ export const getItemDetails: RequestHandler = async (
   }
   const itemImages: any = await getImages();
   return GET(res, { itemDetails, itemImages }, "Items and its Images");
+};
+
+export const getItemImage: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const itemImageId = req.headers.itemimageid;
+  function getImages() {
+    return new Promise(function (resolve, reject) {
+      itemImageGfs
+        .find({ _id: new mongoose.Types.ObjectId(itemImageId?.toString()) })
+        .toArray(function (err: any, files: any) {
+          if (err) {
+            return reject(err);
+          }
+          return resolve(files);
+        });
+    });
+  }
+  const itemImages: any = await getImages();
+  if (!(itemImages && itemImages.length)) {
+    return sendError(404, "Image not found.");
+  }
+  const stream = itemImageGfs.openDownloadStreamByName(itemImages[0].filename);
+  stream.pipe(res);
+
 };

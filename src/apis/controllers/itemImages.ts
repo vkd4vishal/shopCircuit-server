@@ -7,3 +7,4 @@ export const uploadItemImages: RequestHandler = async (
 ) => {
   return UPDATE(res, {}, "Item images");
 };
+

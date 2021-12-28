@@ -22,6 +22,7 @@ import {
   getCategories,
   getItemDetails,
   getItems,
+  getItemImage,
   getProfile,
   getRatingAndReviews,
   login,
@@ -114,6 +115,7 @@ router.post(
 );
 router.get("/getItems", handleError(getItems));
 router.get("/getItemDetails", handleError(getItemDetails));
+router.get("/getItemImage", handleError(getItemImage));
 router.post(
   "/uploadItemImages",
   validateHeaders(itemImageValidator),
