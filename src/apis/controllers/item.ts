@@ -247,7 +247,7 @@ export const getItemImage: RequestHandler = async (
   if (!(itemImages && itemImages.length)) {
     return sendError(404, "Image not found.");
   }
-  const stream = itemImageGfs.openDownloadStreamByName(itemImages[0].filename);
+  const stream = itemImageGfs.openDownloadStream( new mongoose.Types.ObjectId(itemImageId?.toString()));
   stream.pipe(res);
 
 };
