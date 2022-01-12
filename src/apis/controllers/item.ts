@@ -34,10 +34,6 @@ export const validateItemsWithSeller = async (
   const itemsRecord = await validateItems(items);
   const seller = await validateSeller(sellerId);
   itemsRecord.forEach((item) => {
-    // const record = await itemModel.findOne({
-    //   sellerId: new mongoose.Types.ObjectId(sellerId?.toString()),
-    //   _id: new mongoose.Types.ObjectId(itemId?.toString()),
-    // });
     if (item.sellerId.toString() !== sellerId) {
       return sendError(
         500,
@@ -47,11 +43,30 @@ export const validateItemsWithSeller = async (
   });
   return { itemsRecord, seller };
 };
+export const validateItemImagesWithItem = async (
+  itemImages: string[],
+  itemid: string
+) => {
+  const item = await validateItems([itemid]);
+  const itemImagesRecords: any = await getImages(itemid);
 
+  itemImages.forEach((image) => {
+    const fetchedImage = itemImagesRecords.find(
+      (fetchedImage: { _id: string }) => fetchedImage._id === image
+    );
+    if (!fetchedImage) {
+      return sendError(
+        500,
+        `The selected item Image ${image}  doesn't belong to the item ${item[0]?.itemName}`
+      );
+    }
+  });
+  return {};
+};
 export const validateItems = async (items: string[]) => {
   const records = await itemModel.find({ _id: { $in: items } });
   const record1 = await itemModel.find({ _id: items[0] });
-  console.log("records", records ,"record1",record1,"item",items[0]);
+  console.log("records", records, "record1", record1, "item", items[0]);
   if (records.length !== items.length) {
     items.forEach((item) => {
       if (!records.find((record) => record._id.toString() === item)) {
@@ -200,30 +215,28 @@ export const getItems: RequestHandler = async (req: Request, res: Response) => {
 
   return GET(res, { data, totalDocs: items.totalDocs }, "Items");
 };
-
+const getImages = (itemId: string) => {
+  return new Promise(function (resolve, reject) {
+    itemImageGfs
+      .find({ filename: itemId + ".png" })
+      .toArray(function (err: any, files: any) {
+        if (err) {
+          return reject(err);
+        }
+        return resolve(files);
+      });
+  });
+};
 export const getItemDetails: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
-  const itemId = req.headers.itemid;
+  const itemId = req.headers.itemid as unknown as string;
 
   const itemDetails = await itemModel.findOne({
-    _id: new mongoose.Types.ObjectId(itemId?.toString()),
+    _id: new mongoose.Types.ObjectId(itemId),
   });
-
-  function getImages() {
-    return new Promise(function (resolve, reject) {
-      itemImageGfs
-        .find({ filename: itemId?.toString() + ".png" })
-        .toArray(function (err: any, files: any) {
-          if (err) {
-            return reject(err);
-          }
-          return resolve(files);
-        });
-    });
-  }
-  const itemImages: any = await getImages();
+  const itemImages: any = await getImages(itemId);
   return GET(res, { itemDetails, itemImages }, "Items and its Images");
 };
 
@@ -252,15 +265,20 @@ export const getItemImage: RequestHandler = async (
   stream.pipe(res);
 
 };
+interface deleteItemImagesHeaders {
+  userid: string;
+  itemid: string;
+}
 export const deleteItemImages: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
-  const sellerid: any = req.headers.userid;
-  const { items } = req.body;
-  console.log(sellerid)
-  await validateItemsWithSeller(items, sellerid);
-  items.forEach((itemImageId: string) => {
+  const { userid, itemid } = req.headers as unknown as deleteItemImagesHeaders;
+  const { itemImages } = req.body as unknown as { itemImages: string[] };
+  await validateItemsWithSeller([itemid], userid);
+  await validateItemImagesWithItem(itemImages, itemid);
+
+  itemImages.forEach((itemImageId: string) => {
     itemImageGfs
       .find({ _id: itemImageId?.toString() + ".png" })
       .toArray((err: any, files: any) => {
@@ -269,7 +287,5 @@ export const deleteItemImages: RequestHandler = async (
         });
       });
   });
-  
-
   return DELETE(res, {}, "Items");
-}
+};

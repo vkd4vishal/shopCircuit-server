@@ -19,22 +19,23 @@ export const updateItemHeaderValidator = Joi.object({
     .regex(/^[0-9a-fA-F]{24}$/),
  
 });
-export const deleteItemsHeaderValidator = Joi.object({
-//   itemid: Joi.string()
-//     .regex(/^[0-9a-fA-F]{24}$/)
-//     .required(),
- 
-  items: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/)),
+export const deleteItemImagesHeaderValidator = Joi.object({
+  itemid: Joi.string()
+    .regex(/^[0-9a-fA-F]{24}$/)
+    .required(),
 });
 export const deleteItemsBodyValidator = Joi.object({
-    //   itemid: Joi.string()
-    //     .regex(/^[0-9a-fA-F]{24}$/)
-    //     .required(),
-    //   userid: Joi.string()
-    //     .regex(/^[0-9a-fA-F]{24}$/)
-    //     .required(),
-      items: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/)).required().min(1),
-    });
+  items: Joi.array()
+    .items(Joi.string().regex(/^[0-9a-fA-F]{24}$/))
+    .required()
+    .min(1),
+});
+export const deleteItemImagesBodyValidator = Joi.object({
+  itemImages: Joi.array()
+    .items(Joi.string().regex(/^[0-9a-fA-F]{24}$/))
+    .required()
+    .min(1),
+});
 export const addItemHeaderValidator = Joi.object({
   categoryid: Joi.string()
     .regex(/^[0-9a-fA-F]{24}$/)

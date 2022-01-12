@@ -22,8 +22,8 @@ import {
   forgotPassword,
   getCategories,
   getItemDetails,
-  getItems,
   getItemImage,
+  getItems,
   getProfile,
   getRatingAndReviews,
   login,
@@ -46,8 +46,9 @@ import {
   addItemHeaderValidator,
   categoryValidator,
   changePasswordValidator,
+  deleteItemImagesBodyValidator,
+  deleteItemImagesHeaderValidator,
   deleteItemsBodyValidator,
-  deleteItemsHeaderValidator,
   forgotPasswordValidator,
   itemDetailsValidator,
   itemImageValidator,
@@ -76,16 +77,8 @@ router.post(
   validateImage,
   handleError(updateUserImage)
 );
-router.get(
-  "/getProfile",
-  validateUser,
-  handleError(getProfile)
-);
-router.delete(
-  "/deleteUser",
-  validateUser,
-  handleError(deleteUser)
-);
+router.get("/getProfile", validateUser, handleError(getProfile));
+router.delete("/deleteUser", validateUser, handleError(deleteUser));
 
 router.put(
   "/updateUserProfile",
@@ -110,14 +103,13 @@ router.put(
 );
 router.post(
   "/deleteItems",
-  validateHeaders(deleteItemsHeaderValidator),
   validateBody(deleteItemsBodyValidator),
   handleError(deleteItems)
 );
 router.post(
   "/deleteItemImages",
-  validateHeaders(deleteItemsHeaderValidator),
-  validateBody(deleteItemsBodyValidator),
+  validateHeaders(deleteItemImagesHeaderValidator),
+  validateBody(deleteItemImagesBodyValidator),
   handleError(deleteItemImages)
 );
 router.get("/getItems", handleError(getItems));
