@@ -6,7 +6,7 @@ const options = {
   stripUnknown: true,
 };
 const sendValidationError = (res: Response, error: any)=>{
-  return res.status(442).send(`Validation error: ${error}.`)
+  return res.status(422).send({message:`Validation error: ${error}.`})
 }
 export const validateBody = (schema: any) => (
   req: Request,

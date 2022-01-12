@@ -91,7 +91,7 @@ export const updateItemDetails: RequestHandler = async (
   }: { itemid: string; categoryid: string; userid: string } = headers;
   const sellerid = userid;
   await Promise.all([
-    validateItemsWithCategory([itemid], categoryid),
+    validateCategory(categoryid),
     validateItemsWithSeller([itemid], sellerid),
   ]);
   const result = await itemModel.findOneAndUpdate(

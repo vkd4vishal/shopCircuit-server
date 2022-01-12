@@ -16,8 +16,7 @@ export const updateItemHeaderValidator = Joi.object({
     .regex(/^[0-9a-fA-F]{24}$/)
     .required(),
   categoryid: Joi.string()
-    .regex(/^[0-9a-fA-F]{24}$/)
-    .required(),
+    .regex(/^[0-9a-fA-F]{24}$/),
  
 });
 export const deleteItemsHeaderValidator = Joi.object({

@@ -72,7 +72,7 @@ token:{{token}}
     "brand": "Shanky"
 }
 ### update ItemDetails
-POST  /updateItemDetails HTTP/1.1
+PUT  /updateItemDetails HTTP/1.1
 Host:{{host}}
 Content-Type: application/json
 userId:{{userid}}
