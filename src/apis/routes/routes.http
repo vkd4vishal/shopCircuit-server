@@ -1,8 +1,8 @@
 @host = localhost:1234
-@userid= 61b064ae6822a02a735fe011
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFiMDY0YWU2ODIyYTAyYTczNWZlMDExIn0sImlhdCI6MTYzOTE2MTg4MywiZXhwIjoxNjk5MTk3ODgzfQ.BWbWacbilhd7vMRoX0I8INe74LKnZJMViMAH9-n8jwU
+@userid= 61d3b148d760aac02ad40b1f
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFkM2IxNDhkNzYwYWFjMDJhZDQwYjFmIn0sImlhdCI6MTY0MTI2MzQ2OSwiZXhwIjoxNjQxMjk5NDY5fQ.E4pPpN5VezLaWL8j7Y1cbUpzGxSN0_m_wMNkMqyN9SE
 @categoryId=61a1beaee4f4363c63ed4591
-@itemId=61ab02da9297bc948a92a37e
+@itemId=61d3b1a5d760aac02ad40b23
 @sellerId=61b064ae6822a02a735fe011
 @reviewId=61ada666166f39cb74522c95
 
@@ -13,15 +13,15 @@ Host:{{host}}
 Content-Type: application/json
 
 {
-    "userName": "vkd12341",
-    "firstName": "peter",
-    "lastName": "parker",
+    "userName": "sankarSeller",
+    "firstName": " Muduli",
+    "lastName": "sankar",
     "password": "S@ngharsh123",
     "confirmPassword": "S@ngharsh123",
-    "email": "te2er@mail.com",
+    "email": "uli1998@gmail.com",
     "aadharNumber": 123456799012,
     "address": "hell",
-    "isSeller": false
+    "isSeller": true
 }
 
 ### login API
@@ -30,7 +30,7 @@ Host:{{host}}
 Content-Type: application/json
 
 {
-    "userName":"vkd12341",
+    "userName":"sankarSeller",
     "password":"S@ngharsh123"
 }
 
@@ -66,7 +66,7 @@ categoryId:619b573c99e24576066c1f3e
 token:{{token}}
 
 {
-    "itemName": "Sankar XII",
+    "itemName": "SankarSellerNewItem",
     "price": 1000,
     "weight": 1000,
     "brand": "Shanky"
@@ -91,6 +91,7 @@ Content-Type: application/json
 
 ### GET Item Details
 GET  /getItemDetails HTTP/1.1
+GET  /getItems?sellerId=61b064ae6822a02a735fe011&limit=5&page=1&search=louda HTTP/1.1
 Host:{{host}}
 Content-Type: application/json
 itemid:61c95b1a0441b13aa042e6e7
@@ -115,6 +116,16 @@ token:{{token}}
 
 {
  "items":["61b1f20deeebd65d88cd5de1","61b065266822a02a735fe017"]
+}
+### deleteItemImages
+POST  /deleteItemImages HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+userId:{{userid}}
+token:{{token}}
+
+{
+ "items":["61d3b206d760aac02ad40b27"]
 }
 
 ### POST addToCart

@@ -15,6 +15,7 @@ import {
   addCategory,
   addItemDetails,
   changePassword,
+  deleteItemImages,
   deleteItems,
   deleteRatingAndReviews,
   deleteUser,
@@ -112,6 +113,12 @@ router.post(
   validateHeaders(deleteItemsHeaderValidator),
   validateBody(deleteItemsBodyValidator),
   handleError(deleteItems)
+);
+router.post(
+  "/deleteItemImages",
+  validateHeaders(deleteItemsHeaderValidator),
+  validateBody(deleteItemsBodyValidator),
+  handleError(deleteItemImages)
 );
 router.get("/getItems", handleError(getItems));
 router.get("/getItemDetails", handleError(getItemDetails));

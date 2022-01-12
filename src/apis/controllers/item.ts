@@ -50,7 +50,8 @@ export const validateItemsWithSeller = async (
 
 export const validateItems = async (items: string[]) => {
   const records = await itemModel.find({ _id: { $in: items } });
-  console.log("records", records);
+  const record1 = await itemModel.find({ _id: items[0] });
+  console.log("records", records ,"record1",record1,"item",items[0]);
   if (records.length !== items.length) {
     items.forEach((item) => {
       if (!records.find((record) => record._id.toString() === item)) {
@@ -251,3 +252,24 @@ export const getItemImage: RequestHandler = async (
   stream.pipe(res);
 
 };
+export const deleteItemImages: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  const sellerid: any = req.headers.userid;
+  const { items } = req.body;
+  console.log(sellerid)
+  await validateItemsWithSeller(items, sellerid);
+  items.forEach((itemImageId: string) => {
+    itemImageGfs
+      .find({ _id: itemImageId?.toString() + ".png" })
+      .toArray((err: any, files: any) => {
+        files.forEach((file: any) => {
+          itemImageGfs.delete(file._id);
+        });
+      });
+  });
+  
+
+  return DELETE(res, {}, "Items");
+}
