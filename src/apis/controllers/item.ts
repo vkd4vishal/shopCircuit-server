@@ -49,15 +49,16 @@ export const validateItemImagesWithItem = async (
 ) => {
   const item = await validateItems([itemid]);
   const itemImagesRecords: any = await getImages(itemid);
-
+  console.log("itemImagesRecords", itemImagesRecords);
   itemImages.forEach((image) => {
     const fetchedImage = itemImagesRecords.find(
-      (fetchedImage: { _id: string }) => fetchedImage._id === image
+      (fetchedImage: { _id: string }) =>
+        fetchedImage._id.toString() === image.toString()
     );
     if (!fetchedImage) {
       return sendError(
         500,
-        `The selected item Image ${image}  doesn't belong to the item ${item[0]?.itemName}`
+        `The selected item Image with id ${image}  doesn't belong to the item ${item[0]?.itemName}`
       );
     }
   });
@@ -65,8 +66,6 @@ export const validateItemImagesWithItem = async (
 };
 export const validateItems = async (items: string[]) => {
   const records = await itemModel.find({ _id: { $in: items } });
-  const record1 = await itemModel.find({ _id: items[0] });
-  console.log("records", records, "record1", record1, "item", items[0]);
   if (records.length !== items.length) {
     items.forEach((item) => {
       if (!records.find((record) => record._id.toString() === item)) {
@@ -261,9 +260,10 @@ export const getItemImage: RequestHandler = async (
   if (!(itemImages && itemImages.length)) {
     return sendError(404, "Image not found.");
   }
-  const stream = itemImageGfs.openDownloadStream( new mongoose.Types.ObjectId(itemImageId?.toString()));
+  const stream = itemImageGfs.openDownloadStream(
+    new mongoose.Types.ObjectId(itemImageId?.toString())
+  );
   stream.pipe(res);
-
 };
 interface deleteItemImagesHeaders {
   userid: string;
@@ -277,15 +277,17 @@ export const deleteItemImages: RequestHandler = async (
   const { itemImages } = req.body as unknown as { itemImages: string[] };
   await validateItemsWithSeller([itemid], userid);
   await validateItemImagesWithItem(itemImages, itemid);
+  itemImageGfs
+  .find({ filename: itemid?.toString() + ".png" })
+  .toArray((err: any, files: any) => {
+    files.forEach((file: any) => {
 
-  itemImages.forEach((itemImageId: string) => {
-    itemImageGfs
-      .find({ _id: itemImageId?.toString() + ".png" })
-      .toArray((err: any, files: any) => {
-        files.forEach((file: any) => {
-          itemImageGfs.delete(file._id);
-        });
-      });
+      if (
+        itemImages.find((image) => image.toString() === file._id.toString())
+      ) {
+        itemImageGfs.delete(file._id);
+      }
+    });
   });
-  return DELETE(res, {}, "Items");
+  return DELETE(res, {}, "Item Images");
 };

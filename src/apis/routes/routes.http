@@ -1,6 +1,6 @@
 @host = localhost:1234
 @userid= 61d3b148d760aac02ad40b1f
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFkM2IxNDhkNzYwYWFjMDJhZDQwYjFmIn0sImlhdCI6MTY0MTI2MzQ2OSwiZXhwIjoxNjQxMjk5NDY5fQ.E4pPpN5VezLaWL8j7Y1cbUpzGxSN0_m_wMNkMqyN9SE
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjFiMDY0YWU2ODIyYTAyYTczNWZlMDExIn0sImlhdCI6MTY0MTk5MjA1MSwiZXhwIjoxNjQyMDI4MDUxfQ.CwuZqEhx9irMVJAEEPacTgOn6yNEy5m2j0wHZz5NZTY
 @categoryId=61a1beaee4f4363c63ed4591
 @itemId=61d3b1a5d760aac02ad40b23
 @sellerId=61b064ae6822a02a735fe011
@@ -90,8 +90,7 @@ Host:{{host}}
 Content-Type: application/json
 
 ### GET Item Details
-GET  /getItemDetails HTTP/1.1
-GET  /getItems?sellerId=61b064ae6822a02a735fe011&limit=5&page=1&search=louda HTTP/1.1
+GET  /getItemDetails HTTP/1.1 HTTP/1.1
 Host:{{host}}
 Content-Type: application/json
 itemid:61c95b1a0441b13aa042e6e7
@@ -234,11 +233,21 @@ token:{{token}}
 reviewId:{{reviewId}}
 
 
-### 
-
+### GET CART ITEMS
 GET  /getCartItems HTTP/1.1
 Host:{{host}}
 Content-Type: application/json
 userId:{{userid}}
 itemId:{{itemId}}
 token:{{token}}
+
+### DELETE ITEM IMAGES
+POST  /deleteItemImages HTTP/1.1
+Host:{{host}}
+Content-Type: application/json
+itemId:61b3a8f20748479a53dc016e
+token:{{token}}
+
+{
+    "itemImages":["61d2bb5edbe23cf145503a01","61d2bbbfdbe23cf145503a12"]
+}
